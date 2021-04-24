@@ -33,7 +33,7 @@ void Communicator::bindAndListen()
 	// Set up the socketInfo structure
 	socketInfo.sin_family = AF_INET;
 	socketInfo.sin_addr.s_addr = INADDR_ANY;
-	socketInfo.sin_port = htons(5150);
+	socketInfo.sin_port = htons(SERVER_PORT);
 
 	// bind server socket, and print error if wasnt successfull
 	if (bind(this->m_serverSocket, (SOCKADDR*)&socketInfo, sizeof(socketInfo)) == SOCKET_ERROR)
