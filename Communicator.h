@@ -1,6 +1,9 @@
 #pragma once
 #include <winsock2.h>
 #include <map>
+#include <iostream>
+#include <thread>
+#include "LoginRequestHandler.h"
 #include "IRequestHandler.h"
 
 class Communicator
