@@ -2,6 +2,7 @@
 #pragma comment(lib, "Ws2_32.lib")
 
 #define DATA_LEN 5
+#define SERVER_PORT 5150
 
 // this function will set up the server socket and start listening ofr connections
 void Communicator::bindAndListen()
