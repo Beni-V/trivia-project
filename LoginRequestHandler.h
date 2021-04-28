@@ -1,7 +1,8 @@
 #pragma once
 #include "IRequestHandler.h"
+
 class LoignRequestHandler : public IRequestHandler
 {
-	// Just an empty class for this version (1.0.1)
-	// The use for this object is to isert it into m_communicator::m_clients
+	bool isRequestRelevant(RequestInfo requestInfoStruct) override;
+	RequestResult handleRequest(RequestInfo requestInfoStruct) override;
 };
