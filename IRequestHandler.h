@@ -18,5 +18,6 @@ struct RequestInfo
 
 class IRequestHandler
 {
-	// abstract class for all request handlers, will be empty in current version(1.0.1)
+	virtual bool isRequestRelevant(RequestInfo) = 0;
+	virtual RequestInfo handleRequest(RequestInfo) = 0;
 };
