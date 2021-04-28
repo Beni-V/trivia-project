@@ -22,4 +22,6 @@ RequestResult LoignRequestHandler::handleRequest(RequestInfo requestInfoStruct)
 	// fill RequestResult struct fields with the informarion in RequestInfo struct
 	requestResultStruct.Buffer = requestInfoStruct.buffer;
 	requestResultStruct.newHandler = this;
+
+	return requestResultStruct;
 }

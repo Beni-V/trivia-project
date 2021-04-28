@@ -3,11 +3,6 @@
 #include <string>
 #include <ctime>
 
-struct RequestResult
-{
-	std::vector<unsigned char> Buffer;
-	IRequestHandler* newHandler;
-};
 
 struct RequestInfo
 {
@@ -16,8 +11,16 @@ struct RequestInfo
 	std::vector<unsigned char> buffer;
 };
 
+struct RequestResult;
+
 class IRequestHandler
 {
 	virtual bool isRequestRelevant(RequestInfo) = 0;
 	virtual RequestResult handleRequest(RequestInfo) = 0;
+};
+
+struct RequestResult
+{
+	std::vector<unsigned char> Buffer;
+	IRequestHandler* newHandler;
 };
