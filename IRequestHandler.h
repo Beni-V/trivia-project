@@ -19,5 +19,5 @@ struct RequestInfo
 class IRequestHandler
 {
 	virtual bool isRequestRelevant(RequestInfo) = 0;
-	virtual RequestInfo handleRequest(RequestInfo) = 0;
+	virtual RequestResult handleRequest(RequestInfo) = 0;
 };
