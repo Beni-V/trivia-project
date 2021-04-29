@@ -1,4 +1,5 @@
 #pragma once
+#include "json.hpp"
 #include <string>
 #include <vector>
 #include <bitset>

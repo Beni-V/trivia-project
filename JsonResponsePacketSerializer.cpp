@@ -6,11 +6,16 @@
 #define BYTE 8
 #define SIZE_PART 4
 
+using json = nlohmann::json;
+
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(LoginResponse LR)
 {
+	json jsonObject;
 	std::string responseMessage;
+
 	//create a message in format JSON
-	std::string message = "{status:" + std::to_string(LR.status) + "}";
+	jsonObject["status"] = std::to_string(LR.status);
+	std::string message = jsonObject.dump();
 
 	//append the message code and the message size to the response message
 	responseMessage.append(std::bitset<BYTE>(LOGIN_CODE).to_string()).append(std::bitset<BYTE * SIZE_PART>(message.size()).to_string());
@@ -25,9 +30,12 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Login
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(SignupResponse SR)
 {
+	json jsonObject;
 	std::string responseMessage;
+
 	//create a message in format JSON
-	std::string message = "{status:" + std::to_string(SR.status) + "}";
+	jsonObject["status"] = std::to_string(SR.status);
+	std::string message = jsonObject.dump();
 
 	//append the message code and the message size to the response message
 	responseMessage.append(std::bitset<BYTE>(SIGNUP_CODE).to_string()).append(std::bitset<BYTE * SIZE_PART>(message.size()).to_string());
@@ -42,9 +50,12 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Signu
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(ErrorResponse ER)
 {
+	json jsonObject;
 	std::string responseMessage;
+
 	//create a message in format JSON
-	std::string message = "{message:" + ER.message + "}";
+	jsonObject["status"] = ER.message;
+	std::string message = jsonObject.dump();
 
 	//append the message code and the message size to the response message
 	responseMessage.append(std::bitset<BYTE>(ERROR_CODE).to_string()).append(std::bitset<BYTE * SIZE_PART>(message.size()).to_string());
