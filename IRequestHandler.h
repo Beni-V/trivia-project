@@ -6,7 +6,7 @@
 
 struct RequestInfo
 {
-	std::string requestId;
+	int requestId;
 	time_t receivalTime;
 	std::vector<unsigned char> buffer;
 };
