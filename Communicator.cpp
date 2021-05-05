@@ -10,6 +10,8 @@
 #define MINIMAL_BUFFER_SIZE 40 // minimal message size in bits(message code + message length)
 #define SERVER_PORT 5150
 #define SUCCESS_LOGIN_STATUS 301
+#define AMOUNT_OF_BITS_IN_BYTE 8 
+#define BINARY_BASE 2
 
 // this function will set up the server socket and start listening ofr connections
 void Communicator::bindAndListen()
@@ -81,14 +83,14 @@ void Communicator::handleNewClients(SOCKET newClient)
 	}
 
 	// get the message code and message length from buffer (this lines are good, i checked it)
-	messageCode = std::stoi(std::string(Buffer.begin(), Buffer.end() - MESSAGE_LENGTH_SIZE), 0, 2);
-	messageLength = std::stoi(std::string(Buffer.begin() + MESSAGE_LENGTH_SIZE, Buffer.end()), 0, 2);
+	messageCode = std::stoi(std::string(Buffer.begin(), Buffer.end() - MESSAGE_LENGTH_SIZE), 0, BINARY_BASE);
+	messageLength = std::stoi(std::string(Buffer.begin() + MESSAGE_LENGTH_SIZE, Buffer.end()), 0, BINARY_BASE);
 
 	// resize the buffer for the message (message length multiplied by 8 because the message stored in bits)
-	Buffer.resize(MINIMAL_BUFFER_SIZE + messageLength * 8); 
+	Buffer.resize(MINIMAL_BUFFER_SIZE + messageLength * AMOUNT_OF_BITS_IN_BYTE); 
 
 	// receive the rest of the message (i guess that the trouble in  this expression : (char*)(&Buffer + 40))
-	if (recv(newClient, (char*)(&Buffer[40]), messageLength * 8, 0) == SOCKET_ERROR)
+	if (recv(newClient, (char*)(&Buffer[MINIMAL_BUFFER_SIZE]), messageLength * AMOUNT_OF_BITS_IN_BYTE, 0) == SOCKET_ERROR)
 	{
 		std::cout << WSAGetLastError();
 	}
