@@ -21,7 +21,7 @@ struct ErrorResponse
 
 class JsonResponsePacketSerializer
 {
-	std::vector<unsigned char> serializeResponse(LoginResponse LR);
-	std::vector<unsigned char> serializeResponse(SignupResponse SR);
-	std::vector<unsigned char> serializeResponse(ErrorResponse ER);
+	static std::vector<unsigned char> serializeResponse(LoginResponse LR);
+	static std::vector<unsigned char> serializeResponse(SignupResponse SR);
+	static std::vector<unsigned char> serializeResponse(ErrorResponse ER);
 };
