@@ -1,6 +1,6 @@
 #include "LoginRequestHandler.h"
 
-#define LOGIN_REQUEST "201"
+#define LOGIN_REQUEST 201
 
 // function will return true if the code message is relevant and false if its not
 bool LoignRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
