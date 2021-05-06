@@ -3,6 +3,7 @@
 #include "SqliteDatabase.h"
 #include "LoggedUser.h"
 #include <vector>
+#include <algorithm>
 
 class LoginManager
 {
