@@ -26,7 +26,7 @@ SqliteDatabase::SqliteDatabase()
     else // if not, create the tables
     {
         // create users table
-        std::string sqlStatement = "CREATE TABLE USERS (USERNAME TEXT, PASSWORD TEXT, EMAIL TEXT); ";
+        std::string sqlStatement = "CREATE TABLE USERS (USERNAME TEXT, PASSWORD TEXT, EMAIL TEXT);";
         char* errMessage = nullptr;
         int res = sqlite3_exec(db, sqlStatement.c_str(), NULL, NULL, &errMessage); // execute statement
         if (res != SQLITE_OK)
@@ -49,7 +49,7 @@ int callBackGetInt(void* data, int argc, char** argv, char** azColName)
 bool SqliteDatabase::doesUserExist(std::string userName)
 {
     int amountOfUsersWithUsername;
-    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHER NAME = '" + userName + "';";
+    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHER USERNAME = '" + userName + "';";
     char* errMessage = nullptr;
     int res = sqlite3_exec(db, sqlStatement.c_str(), callBackGetInt, &amountOfUsersWithUsername, &errMessage); // execute statement
     if (res != SQLITE_OK)
@@ -62,12 +62,21 @@ bool SqliteDatabase::doesUserExist(std::string userName)
 bool SqliteDatabase::doesPasswordMatch(std::string userName, std::string password)
 {
     int amountOfUsersWithUsernameAndPassword;
-    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHER NAME = '" + userName + "' AND PASSWORD '" + password + "';";
+    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHER USERNAME = '" + userName + "' AND PASSWORD '" + password + "';";
     char* errMessage = nullptr;
     int res = sqlite3_exec(db, sqlStatement.c_str(), callBackGetInt, &amountOfUsersWithUsernameAndPassword, &errMessage); // execute statement
     if (res != SQLITE_OK)
         std::cout << "Trouble with sending sqlstatement: " << sqlStatement << std::endl;
 
     return amountOfUsersWithUsernameAndPassword;
+}
+
+void SqliteDatabase::addNewUser(std::string userName, std::string password, std::string email)
+{
+    std::string sqlStatement = "INSERT INTO USERS(USERNAME, PASSWORD, EMAIL) VALUES('" + userName + "', '" + password + "', '" + email + "');";
+    char* errMessage = nullptr;
+    int res = sqlite3_exec(db, sqlStatement.c_str(), NULL, NULL, &errMessage); // execute statement
+    if (res != SQLITE_OK)
+        std::cout << "Trouble with sending sqlstatement: " << sqlStatement << std::endl;
 }
 
