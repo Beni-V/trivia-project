@@ -34,3 +34,26 @@ SqliteDatabase::SqliteDatabase()
 
     }
 }
+
+/* this function will return answer from db in case that is a single number
+will be used for checking if username with a specific name exist*/
+int callBackGetInt(void* data, int argc, char** argv, char** azColName)
+{
+    int* result = (int*)data; // that will be the output for function
+    *result = std::atoi(argv[0]); // take the only collum in answer
+
+    return 0;
+}
+
+// will return true if there is user with given username in the db and false if there is no user
+bool SqliteDatabase::doesUserExist(std::string userName)
+{
+    int amountOfUsersWithUsername;
+    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHER NAME = '" + userName + "'";
+    char* errMessage = nullptr;
+    int res = sqlite3_exec(db, sqlStatement.c_str(), callBackGetInt, &amountOfUsersWithUsername, &errMessage); // execute statement
+    if (res != SQLITE_OK)
+        std::cout << "Trouble with sending sqlstatement: " << sqlStatement << std::endl;
+
+    return amountOfUsersWithUsername;
+}
