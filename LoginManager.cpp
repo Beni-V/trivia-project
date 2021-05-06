@@ -1,5 +1,10 @@
 #include "LoginManager.h"
 
+LoginManager::LoginManager()
+{
+	this->m_database = new SqliteDatabase();
+}
+
 void LoginManager::signup(std::string userName, std::string password, std::string email)
 {
 	this->m_database->addNewUser(userName, password, email);
