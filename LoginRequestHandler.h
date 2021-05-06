@@ -1,9 +1,25 @@
 #pragma once
-#include "IRequestHandler.h"
 
-class LoignRequestHandler : public IRequestHandler
+#include "IRequestHandler.h"
+#include "RequestHandlerFactory.h"
+#include "LoginManager.h"
+#include "JsonRequestPacketDeserializer.h"
+#include "JsonResponsePacketSerializer.h"
+
+class RequestHandlerFactory;
+
+class LoginRequestHandler : public IRequestHandler
 {
 public:
-	bool isRequestRelevant(RequestInfo requestInfoStruct) override;
-	RequestResult handleRequest(RequestInfo requestInfoStruct) override;
+	LoginRequestHandler(RequestHandlerFactory& factory, LoginManager& manager);
+
+	bool isRequestRelevant(RequestInfo info) override;
+	RequestResult handleRequest(RequestInfo info) override;
+
+private:
+	RequestResult login(RequestInfo info);
+	RequestResult signup(RequestInfo info);
+
+	RequestHandlerFactory& m_handlerFactory;
+	LoginManager& m_loginManager;
 };

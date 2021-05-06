@@ -5,17 +5,30 @@ LoginManager::LoginManager()
 	this->m_database = new SqliteDatabase();
 }
 
-void LoginManager::signup(std::string userName, std::string password, std::string email)
+bool LoginManager::signup(std::string userName, std::string password, std::string email)
 {
-	this->m_database->addNewUser(userName, password, email);
+	if (!this->m_database->doesUserExist(userName))
+	{
+		this->m_database->addNewUser(userName, password, email);
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
-void LoginManager::login(std::string userName, std::string password)
+bool LoginManager::login(std::string userName, std::string password)
 {
 	LoggedUser newUser(userName);
 	if (this->m_database->doesPasswordMatch(userName, password))
 	{
 		this->m_loggedUsers.push_back(newUser);
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 
