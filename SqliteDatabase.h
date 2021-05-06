@@ -11,6 +11,7 @@ public:
 	bool doesUserExist(std::string userName) override;
 	bool doesPasswordMatch(std::string userName, std::string password) override;
 	void addNewUser(std::string userName, std::string password, std::string email) override;
+	void sendSqlStatement(std::string sqlStatement, int(*callback)(void*, int, char**, char**), void* data);
 
 private:
 	sqlite3* db;

@@ -80,3 +80,11 @@ void SqliteDatabase::addNewUser(std::string userName, std::string password, std:
         std::cout << "Trouble with sending sqlstatement: " << sqlStatement << std::endl;
 }
 
+void SqliteDatabase::sendSqlStatement(std::string sqlStatement, int(*callback)(void*, int, char**, char**), void* data)
+{
+    char* errMessage = nullptr;
+    int res = sqlite3_exec(db, sqlStatement.c_str(), callback, data, &errMessage); // execute statement
+    if (res != SQLITE_OK)
+        std::cout << "Trouble with sending sqlstatement: " << sqlStatement << std::endl;
+}
+
