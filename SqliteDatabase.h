@@ -10,7 +10,7 @@ public:
 	SqliteDatabase(); // the db will be constructed here
 	virtual bool doesUserExist(std::string userName) override;
 	virtual bool doesPasswordMatch(std::string userName, std::string password) override;
-	virtual void assNewUser(std::string userName, std::string password, std::string email) override;
+	virtual void addNewUser(std::string userName, std::string password, std::string email) override;
 	void sendSqlStatement(std::string sqlStatement, int(*callback)(void*, int, char**, char**), void* data);
 
 private:
