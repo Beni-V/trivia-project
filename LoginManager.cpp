@@ -10,7 +10,7 @@ void LoginManager::login(std::string userName, std::string password)
 	LoggedUser newUser(userName);
 	if (this->m_database->doesPasswordMatch(userName, password))
 	{
-		this->m_loggedUsers.push_back(userName);
+		this->m_loggedUsers.push_back(newUser);
 	}
 }
 
