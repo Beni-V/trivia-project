@@ -26,6 +26,7 @@ void LoginManager::logout(std::string userName)
 		if (user->getUsername() == userName)
 		{
 			this->m_loggedUsers.erase(user);
+			break;
 		}
 	}
 }
