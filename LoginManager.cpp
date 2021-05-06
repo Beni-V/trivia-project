@@ -21,5 +21,11 @@ void LoginManager::login(std::string userName, std::string password)
 
 void LoginManager::logout(std::string userName)
 {
-	this->m_loggedUsers.erase(std::remove(m_loggedUsers.begin(), m_loggedUsers.end(), userName));
+	for (auto user = this->m_loggedUsers.begin(); user != this->m_loggedUsers.end(); ++user)
+	{
+		if (user->getUsername() == userName)
+		{
+			this->m_loggedUsers.erase(user);
+		}
+	}
 }
