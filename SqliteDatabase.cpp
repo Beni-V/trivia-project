@@ -49,7 +49,7 @@ int callBackGetInt(void* data, int argc, char** argv, char** azColName)
 bool SqliteDatabase::doesUserExist(std::string userName)
 {
     int amountOfUsersWithUsername;
-    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHER NAME = '" + userName + "'";
+    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHER NAME = '" + userName + "';";
     char* errMessage = nullptr;
     int res = sqlite3_exec(db, sqlStatement.c_str(), callBackGetInt, &amountOfUsersWithUsername, &errMessage); // execute statement
     if (res != SQLITE_OK)
@@ -57,3 +57,17 @@ bool SqliteDatabase::doesUserExist(std::string userName)
 
     return amountOfUsersWithUsername;
 }
+
+// will return true if there is user with the given username and password and false if there is no user
+bool SqliteDatabase::doesPasswordMatch(std::string userName, std::string password)
+{
+    int amountOfUsersWithUsernameAndPassword;
+    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHER NAME = '" + userName + "' AND PASSWORD '" + password + "';";
+    char* errMessage = nullptr;
+    int res = sqlite3_exec(db, sqlStatement.c_str(), callBackGetInt, &amountOfUsersWithUsernameAndPassword, &errMessage); // execute statement
+    if (res != SQLITE_OK)
+        std::cout << "Trouble with sending sqlstatement: " << sqlStatement << std::endl;
+
+    return amountOfUsersWithUsernameAndPassword;
+}
+
