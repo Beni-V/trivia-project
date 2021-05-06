@@ -45,9 +45,9 @@ int callBackGetInt(void* data, int argc, char** argv, char** azColName)
 // will return true if there is user with given username in the db and false if there is no user
 bool SqliteDatabase::doesUserExist(std::string userName)
 {
-    int doesUserExist;
+    int doesUserExist = 0;
 
-    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHER USERNAME = '" + userName + "';";
+    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHERE USERNAME == '" + userName + "';";
     sendSqlStatement(sqlStatement, callBackGetInt, &doesUserExist);
 
     return doesUserExist;
@@ -56,9 +56,9 @@ bool SqliteDatabase::doesUserExist(std::string userName)
 // will return true if there is user with the given username and password and false if there is no user
 bool SqliteDatabase::doesPasswordMatch(std::string userName, std::string password)
 {
-    int doesUserExist; 
+    int doesUserExist = 0;
 
-    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHER USERNAME = '" + userName + "' AND PASSWORD '" + password + "';";
+    std::string sqlStatement = "SELECT COUNT(*) FROM USERS WHERE USERNAME == '" + userName + "' AND PASSWORD == '" + password + "';";
     sendSqlStatement(sqlStatement, callBackGetInt, &doesUserExist);
 
     return doesUserExist;
