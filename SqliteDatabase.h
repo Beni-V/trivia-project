@@ -3,6 +3,9 @@
 #include "sqlite3.h"
 #include <iostream>
 #include <io.h>
+#include <string>
+#include <list>
+#include <vector>
 
 class SqliteDatabase : public IDAtabase
 {
