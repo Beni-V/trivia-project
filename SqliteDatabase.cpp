@@ -54,6 +54,11 @@ SqliteDatabase::SqliteDatabase()
         sqlStatement = "CREATE TABLE QUESTIONS (ID INTEGER NOT NULL PRIMARY KEY, QUESTION TEXT, FIRST_WRONG_ANSWER TEXT, SECOND_WRONG_ANSWER TEXT, THIRD_WRONG_ANSWER TEXT, FOURTH_RGIHT_ANSWER TEXT);";
         sendSqlStatement(sqlStatement, NULL, NULL);
 
+        // create statistics table
+        sqlStatement = "CREATE TABLE STATISTICS (USERNAME TEXT, AVG_ANSWER_TIME INTEGER, CORRECT_ANSWERS_AMOUNT INTEGER, TOTAL_ANSWERS_AMOUNT INTEGER, GAMES_DONE_AMOUNT INTEGER);";
+        sendSqlStatement(sqlStatement, NULL, NULL);
+
+        // add the questions to questions table
         for (std::vector<std::vector<std::string>>::iterator it = questions.begin(); it != questions.end(); it++)
         {
             sqlStatement = "INSERT INTO QUESTIONS (QUESTION, FIRST_WRONG_ANSWER, SECOND_WRONG_ANSWER, THIRD_WRONG_ANSWER, FOURTH_RGIHT_ANSWER) VALUES ('" + it->at(QUESTION_INDEX) + "', '" + it->at(FIRST_ANSWER_INDEX) + "', '" + it->at(SECOND_ANSWER_INDEX) + "', '" + it->at(THIRD_ANSWER_INDEX) + "', '" + it->at(RIGHT_ANSWER_INDEX) + "');";
