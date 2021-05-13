@@ -77,6 +77,16 @@ int callBackGetInt(void* data, int argc, char** argv, char** azColName)
     return 0;
 }
 
+int callBackGetQuestions(void* data, int argc, char** argv, char** azColName)
+{
+    std::vector<std::vector<std::string>>* result = (std::vector<std::vector<std::string>>*) data;
+
+    // added one to defines because the first element is the id in the questions table, its not needed when vector allows me to get question by index
+    result->push_back({ argv[QUESTION_INDEX + 1], argv[FIRST_ANSWER_INDEX + 1], argv[SECOND_ANSWER_INDEX + 1], argv[THIRD_ANSWER_INDEX + 1], argv[RIGHT_ANSWER_INDEX + 1]});
+
+    return 0;
+}
+
 // will return true if there is user with given username in the db and false if there is no user
 bool SqliteDatabase::doesUserExist(std::string userName)
 {
@@ -111,5 +121,15 @@ void SqliteDatabase::sendSqlStatement(std::string sqlStatement, int(*callback)(v
     int res = sqlite3_exec(db, sqlStatement.c_str(), callback, data, &errMessage); // execute statement
     if (res != SQLITE_OK)
         std::cout << "Trouble with sending sqlstatement: " << sqlStatement << std::endl;
+}
+
+std::vector<std::vector<std::string>> SqliteDatabase::getQuestions()
+{
+    std::vector<std::vector<std::string>> questions;
+
+    std::string sqlStatement = "SELECT * FROM QUESTIONS;";
+    sendSqlStatement(sqlStatement, callBackGetQuestions, &questions);
+
+    return questions;
 }
 
