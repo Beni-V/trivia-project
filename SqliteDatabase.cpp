@@ -55,7 +55,7 @@ SqliteDatabase::SqliteDatabase()
         sendSqlStatement(sqlStatement, NULL, NULL);
 
         // create statistics table
-        sqlStatement = "CREATE TABLE STATISTICS (USERNAME TEXT, AVG_ANSWER_TIME INTEGER, CORRECT_ANSWERS_AMOUNT INTEGER, TOTAL_ANSWERS_AMOUNT INTEGER, GAMES_DONE_AMOUNT INTEGER);";
+        sqlStatement = "CREATE TABLE STATISTICS (USERNAME TEXT, AVG_ANSWER_TIME FLOAT, CORRECT_ANSWERS_AMOUNT INTEGER, TOTAL_ANSWERS_AMOUNT INTEGER, GAMES_DONE_AMOUNT INTEGER);";
         sendSqlStatement(sqlStatement, NULL, NULL);
 
         // add the questions to questions table
