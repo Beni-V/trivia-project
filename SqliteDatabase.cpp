@@ -151,3 +151,13 @@ float SqliteDatabase::getPlayerAverageAnswerTime(std::string userName)
     return result;
 }
 
+int SqliteDatabase::getNumOfCorrectAnswers(std::string userName)
+{
+    int result;
+    
+    std::string sqlStatement = "SELECT CORRECT_ANSWERS_AMOUNT FROM STATISTICS WHERE USERNAME = '" + userName + "';";
+    sendSqlStatement(sqlStatement, callBackGetInt, &result);
+
+    return result;
+}
+

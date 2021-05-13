@@ -17,6 +17,7 @@ public:
 	void sendSqlStatement(std::string sqlStatement, int(*callback)(void*, int, char**, char**), void* data);
 	std::vector<std::vector<std::string>> getQuestions();
 	float getPlayerAverageAnswerTime(std::string userName);
+	int getNumOfCorrectAnswers(std::string userName);
 private:
 	sqlite3* db;
 };
