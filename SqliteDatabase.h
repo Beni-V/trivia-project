@@ -18,6 +18,7 @@ public:
 	std::vector<std::vector<std::string>> getQuestions();
 	float getPlayerAverageAnswerTime(std::string userName);
 	int getNumOfCorrectAnswers(std::string userName);
+	int getNumOfTotalAnswers(std::string userName);
 private:
 	sqlite3* db;
 };
