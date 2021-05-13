@@ -80,7 +80,7 @@ int callBackGetInt(void* data, int argc, char** argv, char** azColName)
 int callBackGetFloat(void* data, int argc, char** argv, char** azColName)
 {
     float* result = (float*)data; // that will be the output for function
-    *result = std::atoi(argv[0]); // take the only collum in answer
+    *result = std::stof(argv[0]); // take the only collum in answer
 
     return 0;
 }
