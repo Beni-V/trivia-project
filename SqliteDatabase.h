@@ -16,7 +16,7 @@ public:
 	void addNewUser(std::string userName, std::string password, std::string email) override;
 	void sendSqlStatement(std::string sqlStatement, int(*callback)(void*, int, char**, char**), void* data);
 	std::vector<std::vector<std::string>> getQuestions();
-
+	float getPlayerAverageAnswerTime(std::string userName);
 private:
 	sqlite3* db;
 };

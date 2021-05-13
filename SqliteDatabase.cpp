@@ -77,6 +77,14 @@ int callBackGetInt(void* data, int argc, char** argv, char** azColName)
     return 0;
 }
 
+int callBackGetFloat(void* data, int argc, char** argv, char** azColName)
+{
+    float* result = (float*)data; // that will be the output for function
+    *result = std::atoi(argv[0]); // take the only collum in answer
+
+    return 0;
+}
+
 int callBackGetQuestions(void* data, int argc, char** argv, char** azColName)
 {
     std::vector<std::vector<std::string>>* result = (std::vector<std::vector<std::string>>*) data;
@@ -131,5 +139,15 @@ std::vector<std::vector<std::string>> SqliteDatabase::getQuestions()
     sendSqlStatement(sqlStatement, callBackGetQuestions, &questions);
 
     return questions;
+}
+
+float SqliteDatabase::getPlayerAverageAnswerTime(std::string userName)
+{
+    float result;
+
+    std::string sqlStatement = "SELECT AVG_ANSWER_TIME FROM STATISTICS WHERE USERNAME = '" + userName + "';";
+    sendSqlStatement(sqlStatement, callBackGetFloat, &result);
+
+    return result;
 }
 
