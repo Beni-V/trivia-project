@@ -8,4 +8,5 @@ private:
 public:
 	LoggedUser(std::string username);
 	std::string getUsername();
+	bool operator==(const LoggedUser& user) const;
 };
