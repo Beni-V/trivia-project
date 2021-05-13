@@ -1,5 +1,11 @@
 #include "SqliteDatabase.h"
 
+#define QUESTION_INDEX 0
+#define FIRST_ANSWER_INDEX 1
+#define SECOND_ANSWER_INDEX 2
+#define THIRD_ANSWER_INDEX 3
+#define RIGHT_ANSWER_INDEX 4
+
 SqliteDatabase::SqliteDatabase()
 {
     std::string dbFileName = "MyDB.sqlite";
@@ -25,10 +31,34 @@ SqliteDatabase::SqliteDatabase()
 
     else // if not, create the tables
     {
+        // this vector will store lists with the questions (list is: Question and the answers)
+        // first element in list is the question, 2-4 is the wrong answers, 4 is the right answer
+        std::vector<std::vector<std::string>> questions{
+            {"What is the capital of USA?", "New York", "Los Angeles", "Miami", "Washington"},
+            {"How many bits are there in one byte?", "4", "10", "16", "8"},
+            {"Who created the Linux Operating System?", "Elon Musk", "Bill Gates", "Bibi Nethanyahu", "Linus Torvalds"},
+            {"What is the worst programming language on the planet earth?", "Python", "C++", "Assembly", "JavaScript"},
+            {"Who is the richest person in the world?", "Bill Gates", "Elon Musk", "Jeff Bezos", "Vladimir Putin"},
+            {"Which chess piece is the most valuable?", "Rook", "Bishop", "Queen", "King"},
+            {"What is Debugging?", "Insect elimination process", "Kind of sport", "Musical genre", "Being the detective in a crime movie where you are also the murderer"},
+            {"What Americans do at least a hundred times a day?", "Blinking", "Open up a smartphone", "Steps", "Open up the refrigerator"},
+            {"What is the capital of Israel?", "Haifa", "Rishon-Lezion", "Kfar-Saba", "Jerusalem"},
+            {"Which of these tools is the most powerful for collecting data?", "Nmap", "WPScan", "Wireshark", "Facebook"}
+        };
+
         // create users table
         std::string sqlStatement = "CREATE TABLE USERS (USERNAME TEXT, PASSWORD TEXT, EMAIL TEXT);";
         sendSqlStatement(sqlStatement, NULL, NULL);
 
+        // create questions table
+        sqlStatement = "CREATE TABLE QUESTIONS (ID INTEGER NOT NULL PRIMARY KEY, QUESTION TEXT, FIRST_WRONG_ANSWER TEXT, SECOND_WRONG_ANSWER TEXT, THIRD_WRONG_ANSWER TEXT, FOURTH_RGIHT_ANSWER TEXT);";
+        sendSqlStatement(sqlStatement, NULL, NULL);
+
+        for (std::vector<std::vector<std::string>>::iterator it = questions.begin(); it != questions.end(); it++)
+        {
+            sqlStatement = "INSERT INTO QUESTIONS (QUESTION, FIRST_WRONG_ANSWER, SECOND_WRONG_ANSWER, THIRD_WRONG_ANSWER, FOURTH_RGIHT_ANSWER) VALUES ('" + it->at(QUESTION_INDEX) + "', '" + it->at(FIRST_ANSWER_INDEX) + "', '" + it->at(SECOND_ANSWER_INDEX) + "', '" + it->at(THIRD_ANSWER_INDEX) + "', '" + it->at(RIGHT_ANSWER_INDEX) + "');";
+            sendSqlStatement(sqlStatement, NULL, NULL);
+        }
     }
 }
 
