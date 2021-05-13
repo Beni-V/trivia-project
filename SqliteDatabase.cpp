@@ -67,7 +67,7 @@ SqliteDatabase::SqliteDatabase()
     }
 }
 
-/* this function will return answer from db in case that is a single number
+/* this function will return answer from db in case that is a single integer number
 will be used for checking if username with a specific name exist*/
 int callBackGetInt(void* data, int argc, char** argv, char** azColName)
 {
@@ -77,6 +77,8 @@ int callBackGetInt(void* data, int argc, char** argv, char** azColName)
     return 0;
 }
 
+/* this function will return answer from db in case that is a single integer number
+will be used for getting the average anwering time of user*/
 int callBackGetFloat(void* data, int argc, char** argv, char** azColName)
 {
     float* result = (float*)data; // that will be the output for function
@@ -85,6 +87,7 @@ int callBackGetFloat(void* data, int argc, char** argv, char** azColName)
     return 0;
 }
 
+// tihs function is the call back function for getting the questions from database
 int callBackGetQuestions(void* data, int argc, char** argv, char** azColName)
 {
     std::vector<std::vector<std::string>>* result = (std::vector<std::vector<std::string>>*) data;
@@ -117,12 +120,14 @@ bool SqliteDatabase::doesPasswordMatch(std::string userName, std::string passwor
     return doesUserExist;
 }
 
+// will isert new user into users table in the database
 void SqliteDatabase::addNewUser(std::string userName, std::string password, std::string email)
 {
     std::string sqlStatement = "INSERT INTO USERS(USERNAME, PASSWORD, EMAIL) VALUES('" + userName + "', '" + password + "', '" + email + "');";
     sendSqlStatement(sqlStatement, NULL, NULL);
 }
 
+// this function is used to send sql requests and check it for errors, also supports to get callback function and return responses
 void SqliteDatabase::sendSqlStatement(std::string sqlStatement, int(*callback)(void*, int, char**, char**), void* data)
 {
     char* errMessage = nullptr;
@@ -131,6 +136,7 @@ void SqliteDatabase::sendSqlStatement(std::string sqlStatement, int(*callback)(v
         std::cout << "Trouble with sending sqlstatement: " << sqlStatement << std::endl;
 }
 
+// wil return the questions vector from db
 std::vector<std::vector<std::string>> SqliteDatabase::getQuestions()
 {
     std::vector<std::vector<std::string>> questions;
@@ -141,6 +147,7 @@ std::vector<std::vector<std::string>> SqliteDatabase::getQuestions()
     return questions;
 }
 
+// will return the average answering time of user from database
 float SqliteDatabase::getPlayerAverageAnswerTime(std::string userName)
 {
     float result;
@@ -151,6 +158,7 @@ float SqliteDatabase::getPlayerAverageAnswerTime(std::string userName)
     return result;
 }
 
+// will return the amount of correct user answered questions from database
 int SqliteDatabase::getNumOfCorrectAnswers(std::string userName)
 {
     int result;
@@ -161,6 +169,7 @@ int SqliteDatabase::getNumOfCorrectAnswers(std::string userName)
     return result;
 }
 
+// will return the amount of total user answered questions from database
 int SqliteDatabase::getNumOfTotalAnswers(std::string userName)
 {
     int result;
@@ -171,6 +180,7 @@ int SqliteDatabase::getNumOfTotalAnswers(std::string userName)
     return result;
 }
 
+// will return the amount of games user played from database
 int SqliteDatabase::getNumOfPlayerGames(std::string userName)
 {
     int result;
