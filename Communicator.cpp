@@ -65,7 +65,7 @@ void Communicator::bindAndListen()
 	}
 }
 
-void Communicator::handleNewClients(SOCKET newClient)
+void Communicator::handleNewClients(SOCKET newClient, LoginRequestHandler userLoginRequest)
 {
 	std::vector<unsigned char> Buffer; // this buffer will store the received message from socket
 	int messageCode; // will store the message code of message (first byte)
@@ -111,16 +111,8 @@ void Communicator::handleNewClients(SOCKET newClient)
 		send(newClient, (char*)&serializedResponse[0], serializedResponse.size(), 0);
 	}
 	else // if message code is good
-	{
-		LoginResponse loginResponse;
-
-		/* 
-		* in this version, any request with relevant status will be responded like successed request
-		* but in next versions, the request will be deserialized and will be checked with the database
-		*/ 
-
-		loginResponse.status = SUCCESS_LOGIN_STATUS; 
-		serializedResponse = JsonResponsePacketSerializer::serializeResponse(loginResponse);
+	{ 
+		serializedResponse = userLoginRequest.handleRequest(requestInfo).Buffer;
 		send(newClient, (char*)&serializedResponse[0], serializedResponse.size(), 0);
 	}
 	
@@ -150,7 +142,7 @@ void Communicator::startHandleRequests()
 		}
 
 		// create thread for each client
-		std::thread clientThread(&Communicator::handleNewClients, this, newClientSocket);
+		std::thread clientThread(&Communicator::handleNewClients, this, newClientSocket, userRequestHandler);
 		clientThread.detach();
 
 		this->m_clients.insert({ newClientSocket, userRequestHandler}); // add client to map (class field) with his request handler

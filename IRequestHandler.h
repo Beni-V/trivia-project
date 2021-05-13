@@ -11,8 +11,6 @@ struct RequestInfo
 	std::vector<unsigned char> buffer;
 };
 
-struct RequestResult;
-
 class IRequestHandler
 {
 public:

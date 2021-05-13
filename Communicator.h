@@ -13,7 +13,7 @@ private:
 	std::map<SOCKET, IRequestHandler*> m_clients;
 
 	void bindAndListen();
-	void handleNewClients(SOCKET newClient);
+	void handleNewClients(SOCKET newClient, LoginRequestHandler userLoginRequest);
 
 public:
 	void startHandleRequests();
