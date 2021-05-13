@@ -171,3 +171,13 @@ int SqliteDatabase::getNumOfTotalAnswers(std::string userName)
     return result;
 }
 
+int SqliteDatabase::getNumOfPlayerGames(std::string userName)
+{
+    int result;
+
+    std::string sqlStatement = "SELECT GAMES_DONE_AMOUNT FROM STATISTICS WHERE USERNAME = '" + userName + "';";
+    sendSqlStatement(sqlStatement, callBackGetInt, &result);
+
+    return result;
+}
+
