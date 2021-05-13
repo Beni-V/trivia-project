@@ -130,7 +130,9 @@ void Communicator::handleNewClients(SOCKET newClient)
 void Communicator::startHandleRequests()
 {
 	SOCKET newClientSocket;
-	IRequestHandler* userRequestHandler = new LoignRequestHandler;
+	RequestHandlerFactory* handlerFactory = new RequestHandlerFactory();
+	LoginManager* loginManager = new LoginManager();
+	IRequestHandler* userRequestHandler = new LoginRequestHandler(*handlerFactory, *loginManager);
 
 	bindAndListen();
 

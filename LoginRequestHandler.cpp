@@ -1,11 +1,20 @@
 #include "LoginRequestHandler.h"
 
 #define LOGIN_REQUEST 201
+#define SIGNUP_REQUEST 202
+
+LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& handlerFactory, LoginManager& loginManager)
+	: m_handlerFactory(handlerFactory), m_loginManager(loginManager)
+{}
 
 // function will return true if the code message is relevant and false if its not
-bool LoignRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
+bool LoginRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
 {
 	if (requestInfoStruct.requestId == LOGIN_REQUEST)
+	{
+		return true;
+	}
+	else if (requestInfoStruct.requestId == SIGNUP_REQUEST)
 	{
 		return true;
 	}
@@ -15,15 +24,74 @@ bool LoignRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
 	}
 }
 
-RequestResult LoignRequestHandler::handleRequest(RequestInfo requestInfoStruct)
+RequestResult LoginRequestHandler::handleRequest(RequestInfo requestInfoStruct)
 {
 	RequestResult requestResultStruct;
 
-	// fill RequestResult struct fields with the informarion in RequestInfo struct
-	requestResultStruct.Buffer = requestInfoStruct.buffer;
+	if (requestInfoStruct.requestId == LOGIN_REQUEST)
+	{
+		this->login(requestInfoStruct);
+	}
+	else if (requestInfoStruct.requestId == SIGNUP_REQUEST)
+	{
+		this->signup(requestInfoStruct);
+	}	
 
-	// new handler will be login request handler because that the only request handler in this version of program
-	requestResultStruct.newHandler = new LoignRequestHandler();
+	return requestResultStruct;
+}
 
+RequestResult LoginRequestHandler::login(RequestInfo info)
+{
+	RequestResult requestResultStruct;
+
+	// if the login succeed
+	if (this->m_loginManager.login(JsonRequestPacketDeserializer::deserializeLoginRequest(info.buffer).username, JsonRequestPacketDeserializer::deserializeLoginRequest(info.buffer).password))
+	{
+		LoginResponse loginResponse;
+		loginResponse.status = 1;
+
+		// fill RequestResult struct buffer with the server message
+		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(loginResponse);
+		// continue to the next step, Menu
+		requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler();
+	}
+	else
+	{
+		ErrorResponse errorResponse;
+		errorResponse.message = "ERROR";
+
+		// fill RequestResult struct buffer with the server message
+		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(errorResponse);
+		// try again to login
+		requestResultStruct.newHandler = this->m_handlerFactory.createLoginRequestHandler();
+	}
+	return requestResultStruct;
+}
+
+RequestResult LoginRequestHandler::signup(RequestInfo info)
+{
+	RequestResult requestResultStruct;
+
+	// if the signup succeed
+	if (this->m_loginManager.signup(JsonRequestPacketDeserializer::deserializeSignupRequest(info.buffer).username, JsonRequestPacketDeserializer::deserializeSignupRequest(info.buffer).password, JsonRequestPacketDeserializer::deserializeSignupRequest(info.buffer).email))
+	{
+		SignupResponse signupResponse;
+		signupResponse.status = 1;
+
+		// fill RequestResult struct buffer with the server message
+		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(signupResponse);
+		// continue to the next step, Menu
+		requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler();
+	}
+	else
+	{
+		ErrorResponse errorResponse;
+		errorResponse.message = "ERROR";
+
+		// fill RequestResult struct buffer with the server message
+		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(errorResponse);
+		// try again to signup
+		requestResultStruct.newHandler = this->m_handlerFactory.createLoginRequestHandler();
+	}
 	return requestResultStruct;
 }
