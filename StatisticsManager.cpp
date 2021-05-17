@@ -2,11 +2,7 @@
 
 std::vector<std::string> StatisticsManager::getHighScore()
 {
-	std::vector<std::string> topPlayers;
-	int currPlayerTotalAnswers;
-	int currPlayerRightAnswers;
-	std::string currPlayerUserName;
-
+	return std::vector<std::string>();
 }
 
 std::vector<std::string> StatisticsManager::getUserStatistics(std::string userName)
