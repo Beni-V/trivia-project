@@ -98,6 +98,16 @@ int callBackGetQuestions(void* data, int argc, char** argv, char** azColName)
     return 0;
 }
 
+// this function is the call back for getting usernames list
+int callBackGetUsers(void* data, int argc, char** argv, char** azColName)
+{
+    std::vector<std::string>* result = (std::vector<std::string>*) data;
+
+    result->push_back(argv[0]);
+
+    return 0;
+}
+
 // will return true if there is user with given username in the db and false if there is no user
 bool SqliteDatabase::doesUserExist(std::string userName)
 {
@@ -189,5 +199,13 @@ int SqliteDatabase::getNumOfPlayerGames(std::string userName)
     sendSqlStatement(sqlStatement, callBackGetInt, &result);
 
     return result;
+}
+
+// will return a list of all usernames in users table
+std::vector<std::string> SqliteDatabase::getUserNames()
+{
+    std::vector<std::string> userNames;
+
+    std::string sqlStatement = "SELECT USERNAME FROM USERS;";
 }
 
