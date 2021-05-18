@@ -207,5 +207,8 @@ std::vector<std::string> SqliteDatabase::getUserNames()
     std::vector<std::string> userNames;
 
     std::string sqlStatement = "SELECT USERNAME FROM USERS;";
+    sendSqlStatement(sqlStatement, callBackGetUsers, &userNames);
+
+    return userNames;
 }
 
