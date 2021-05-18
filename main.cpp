@@ -1,5 +1,4 @@
 #include "Server.h"
-#include "LoginManager.h"
 
 int main()
 {
