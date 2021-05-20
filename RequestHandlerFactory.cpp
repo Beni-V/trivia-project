@@ -8,7 +8,7 @@ LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 
 MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler()
 {
-    MenuRequestHandler* menuHandler = new MenuRequestHandler();
+    MenuRequestHandler* menuHandler = new MenuRequestHandler(this->getRoomManager(), this->getStatisticsManager(), *this);
     return menuHandler;
 }
 
