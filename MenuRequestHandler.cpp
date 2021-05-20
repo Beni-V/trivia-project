@@ -32,7 +32,36 @@ bool MenuRequestHandler::isRequestRelevant(RequestInfo info)
 
 RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 {
-    return RequestResult();
+	RequestResult requestResultStruct;
+
+	switch (info.requestId)
+	{
+	case CREATE_ROOM_REQUEST:
+		requestResultStruct = this->createRoom(info);
+		break;
+
+	case GET_ROOMS_REQUEST:
+		requestResultStruct = this->getRooms(info);
+		break;
+
+	case GET_PLAYERS_IN_ROOM_REQUEST:
+		requestResultStruct = this->getPlayersInRoom(info);
+		break;
+
+	case JOIN_ROOM_REQUEST:
+		requestResultStruct = this->joinRoom(info);
+		break;
+
+	case GET_STATISTICS_REQUEST:
+		requestResultStruct = this->getPersonalStats(info);
+		break;
+
+	case LOGOUT_REQUEST:
+		requestResultStruct = this->signout(info);
+		break;
+	}
+
+	return requestResultStruct;
 }
 
 RequestResult MenuRequestHandler::signout(RequestInfo info)
