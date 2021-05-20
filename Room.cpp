@@ -24,7 +24,12 @@ void Room::removeUser(LoggedUser user)
     }
 }
 
-std::vector<LoggedUser> Room::getAllUsers()
+std::vector<std::string> Room::getAllUsers()
 {
-    return this->_participates;
+    std::vector<std::string> usernames;
+    for (LoggedUser user : this->_participates)
+    {
+        usernames.push_back(user.getUsername());
+    }
+    usernames
 }

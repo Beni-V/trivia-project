@@ -18,8 +18,9 @@ public:
 	bool isRequestRelevant(RequestInfo info) override;
 	RequestResult handleRequest(RequestInfo info) override;
 private:
-	RequestResult signout(RequestInfo);
-	RequestResult getRooms(RequestInfo);
+	RequestResult signout(RequestInfo info);
+	RequestResult getRooms(RequestInfo info);
+	RequestResult getPlayersInRoom(RequestInfo info);
 
 	LoggedUser m_user;
 	RoomManager& m_roomManager;

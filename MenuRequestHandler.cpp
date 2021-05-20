@@ -35,7 +35,7 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
     return RequestResult();
 }
 
-RequestResult MenuRequestHandler::signout(RequestInfo)
+RequestResult MenuRequestHandler::signout(RequestInfo info)
 {
 	RequestResult requestResultStruct;
 
@@ -45,12 +45,23 @@ RequestResult MenuRequestHandler::signout(RequestInfo)
 	return requestResultStruct;
 }
 
-RequestResult MenuRequestHandler::getRooms(RequestInfo)
+RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 {
 	RequestResult requestResultStruct;
 
 	requestResultStruct.newHandler = new MenuRequestHandler(this->m_roomManager, this->m_statisticsManager, this->m_handlerFactory); // fill newHandler with next handler
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomsResponse{ SUCCSESS_RESPONSE }); // fill Buffer with serialized get rooms response
+	return requestResultStruct;
+}
+
+RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
+{
+	RequestResult requestResultStruct;
+
+	GetPlayersInRoomResponse response = {this->m_roomManager.getRooms()[JsonRequestPacketDeserializer::deserializeGetPlayersInRoomRequest(info.buffer).roomId].getAllUsers()}; // create response with users in room
+	requestResultStruct.newHandler = new MenuRequestHandler(this->m_roomManager, this->m_statisticsManager, this->m_handlerFactory); // fill newHandler with next handler
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(response); // fill buffer with serialized response
+
 	return requestResultStruct;
 }
 
