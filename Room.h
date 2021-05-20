@@ -17,6 +17,7 @@ struct RoomData
 class Room
 {
 public:
+	Room();
 	Room(RoomData m_metadata);
 	void addUser(LoggedUser newUser);
 	void removeUser(LoggedUser user);

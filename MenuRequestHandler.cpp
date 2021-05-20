@@ -65,4 +65,15 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 	return requestResultStruct;
 }
 
+RequestResult MenuRequestHandler::getPersonalStats(RequestInfo info)
+{
+	RequestResult requestResultStruct;
+
+	GetPersonalStatsResponse response = { SUCCSESS_RESPONSE, this->m_statisticsManager.getUserStatistics(this->m_user.getUsername()) }; // cerate response with user stats
+	requestResultStruct.newHandler = new MenuRequestHandler(this->m_roomManager, this->m_statisticsManager, this->m_handlerFactory); // fill newHandler with next handler
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(response); // fill buffer with serialized response
+
+	return requestResultStruct;
+}
+
 

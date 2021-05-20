@@ -1,5 +1,9 @@
 #include "Room.h"
 
+Room::Room()
+{
+}
+
 Room::Room(RoomData m_metadata)
     : m_metadata(m_metadata)
 {}
@@ -31,5 +35,5 @@ std::vector<std::string> Room::getAllUsers()
     {
         usernames.push_back(user.getUsername());
     }
-    usernames
+    return usernames;
 }
