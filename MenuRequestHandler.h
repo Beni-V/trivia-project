@@ -24,6 +24,7 @@ private:
 	RequestResult getPersonalStats(RequestInfo info);
 	RequestResult getHighScore(RequestInfo info);
 	RequestResult joinRoom(RequestInfo info);
+	RequestResult createRoom(RequestInfo info);
 
 	LoggedUser m_user;
 	RoomManager& m_roomManager;

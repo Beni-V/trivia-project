@@ -100,4 +100,17 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 	return requestResultStruct;
 }
 
+RequestResult MenuRequestHandler::createRoom(RequestInfo info)
+{
+	RequestResult requestResultStruct;
+
+	CreateRoomRequest request = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(info.buffer); // deserialize request
+	this->m_roomManager.createRoom(this->m_user, RoomData{(unsigned int)(this->m_roomManager.getRooms().size() + 1), request.roomName, request.maxUsers, request.questionCount, request.answerTimeout, false}); // create room
+
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse{ SUCCSESS_RESPONSE });// fill buffer with serialized response
+	requestResultStruct.newHandler = new MenuRequestHandler(this->m_roomManager, this->m_statisticsManager, this->m_handlerFactory); // fill newHandler with next handler
+
+	return requestResultStruct;
+}
+
 
