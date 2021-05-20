@@ -76,4 +76,15 @@ RequestResult MenuRequestHandler::getPersonalStats(RequestInfo info)
 	return requestResultStruct;
 }
 
+RequestResult MenuRequestHandler::getHighScore(RequestInfo info)
+{
+	RequestResult requestResultStruct;
+
+	GetHighScoreResponse response = { SUCCSESS_RESPONSE, this->m_statisticsManager.getHighScore() }; // create response with top scored users
+	requestResultStruct.newHandler = new MenuRequestHandler(this->m_roomManager, this->m_statisticsManager, this->m_handlerFactory); // fill newHandler with next handler
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(response); // fill buffer with serialized response
+
+	return requestResultStruct;
+}
+
 

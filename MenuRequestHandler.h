@@ -22,6 +22,7 @@ private:
 	RequestResult getRooms(RequestInfo info);
 	RequestResult getPlayersInRoom(RequestInfo info);
 	RequestResult getPersonalStats(RequestInfo info);
+	RequestResult getHighScore(RequestInfo info);
 
 	LoggedUser m_user;
 	RoomManager& m_roomManager;
