@@ -6,7 +6,7 @@
 #define JOIN_ROOM_REQUEST 504
 #define GET_STATISTICS_REQUEST 505
 #define LOGOUT_REQUEST 506
-#define SUCCSESS_LOGOUT_RESPONSE 1
+#define SUCCSESS_RESPONSE 1
 
 MenuRequestHandler::MenuRequestHandler(RoomManager& roomManager, StatisticsManager& statisticsManager, RequestHandlerFactory& handlerFactory): m_roomManager(roomManager), m_statisticsManager(statisticsManager), m_handlerFactory(handlerFactory)
 {
@@ -41,7 +41,16 @@ RequestResult MenuRequestHandler::signout(RequestInfo)
 
 	this->m_handlerFactory.getLoginManager().logout(this->m_user.getUsername()); // logout user
 	requestResultStruct.newHandler = this->m_handlerFactory.createLoginRequestHandler(); // fill newHandler with next handler (which is login)
-	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(LogoutResponse{ SUCCSESS_LOGOUT_RESPONSE }); // fill Buffer with serialized logout response
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(LogoutResponse{ SUCCSESS_RESPONSE }); // fill Buffer with serialized logout response
+	return requestResultStruct;
+}
+
+RequestResult MenuRequestHandler::getRooms(RequestInfo)
+{
+	RequestResult requestResultStruct;
+
+	requestResultStruct.newHandler = new MenuRequestHandler(this->m_roomManager, this->m_statisticsManager, this->m_handlerFactory); // fill newHandler with next handler
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomsResponse{ SUCCSESS_RESPONSE }); // fill Buffer with serialized get rooms response
 	return requestResultStruct;
 }
 

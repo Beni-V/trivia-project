@@ -19,6 +19,7 @@ public:
 	RequestResult handleRequest(RequestInfo info) override;
 private:
 	RequestResult signout(RequestInfo);
+	RequestResult getRooms(RequestInfo);
 
 	LoggedUser m_user;
 	RoomManager& m_roomManager;
