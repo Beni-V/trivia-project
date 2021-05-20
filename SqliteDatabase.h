@@ -20,6 +20,7 @@ public:
 	int getNumOfCorrectAnswers(std::string userName) override;
 	int getNumOfTotalAnswers(std::string userName) override;
 	int getNumOfPlayerGames(std::string userName) override;
+	std::vector<std::string> getUserNames() override;
 private:
 	sqlite3* db;
 };
