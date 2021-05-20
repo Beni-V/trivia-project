@@ -14,6 +14,7 @@ public:
 	LoginRequestHandler* createLoginRequestHandler();
 	MenuRequestHandler* createMenuRequestHandler();
 	LoginManager& getLoginManager();
+	StatisticsManager& getStatisticsManager();
 
 private:
 	LoginManager m_loginManager;
