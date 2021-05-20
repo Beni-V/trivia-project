@@ -87,4 +87,17 @@ RequestResult MenuRequestHandler::getHighScore(RequestInfo info)
 	return requestResultStruct;
 }
 
+RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
+{
+	RequestResult requestResultStruct;
+
+	JoinRoomRequest request = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer); // deserialize request
+	this->m_roomManager.getRooms()[request.roomId].addUser(this->m_user); // add user to room
+
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse{ SUCCSESS_RESPONSE }); // fill buffer with serialized response
+	requestResultStruct.newHandler = new MenuRequestHandler(this->m_roomManager, this->m_statisticsManager, this->m_handlerFactory); // fill newHandler with next handler
+
+	return requestResultStruct;
+}
+
 
