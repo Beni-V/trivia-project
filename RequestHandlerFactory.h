@@ -15,6 +15,7 @@ public:
 	MenuRequestHandler* createMenuRequestHandler();
 	LoginManager& getLoginManager();
 	StatisticsManager& getStatisticsManager();
+	RoomManager& getRoomManager();
 
 private:
 	LoginManager m_loginManager;

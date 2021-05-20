@@ -21,3 +21,8 @@ StatisticsManager& RequestHandlerFactory::getStatisticsManager()
 {
     return this->m_StatisticsManager;
 }
+
+RoomManager& RequestHandlerFactory::getRoomManager()
+{
+    return this->m_roomManager;
+}
