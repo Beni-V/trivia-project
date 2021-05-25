@@ -6,8 +6,9 @@
         xmlns:local="clr-namespace:TriviaClient"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="MainWindow" Height="800" Width="1000">
-    <Grid>
-
+        Title="Menu" Height="600" Width="1200">
+    <Grid Background="#ffdadada">
+        <Button Content="Sign in" HorizontalAlignment="Left" Margin="10,10,10,10" Height ="540" Width="580" VerticalAlignment="Center" Click="Button_Click" Background="#FFC4C4C4" BorderBrush="#FFC4C4C4" FontSize="30"/>
+        <Button Content="Sign up" HorizontalAlignment="Right" Margin="10,10,10,10" Height ="540" Width="580" VerticalAlignment="Center" Background="#FFC4C4C4" BorderBrush="#FFC4C4C4" FontSize="30" Click="Button_Click_1"/>
     </Grid>
 </Window>
