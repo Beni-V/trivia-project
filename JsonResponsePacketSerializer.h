@@ -95,4 +95,5 @@ public:
 	static std::vector<unsigned char> serializeResponse(GetPersonalStatsResponse GPSR);
 	static std::vector<unsigned char> serializeResponse(JoinRoomResponse JRR);
 	static std::vector<unsigned char> serializeResponse(CreateRoomResponse CRR);
+	static std::vector<unsigned char> serializeResponse(CloseRoomResponse CRR);
 };
