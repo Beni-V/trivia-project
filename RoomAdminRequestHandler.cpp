@@ -48,3 +48,26 @@ bool RoomAdminRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
 		return false;
 	}
 }
+
+// will call the needed handler for each possible request for RoomAdmin state
+RequestResult RoomAdminRequestHandler::handleRequest(RequestInfo requestInfoStruct)
+{
+	RequestResult requestResultStruct;
+
+	switch (requestInfoStruct.requestId)
+	{
+	case CLOSE_ROOM_REQUEST:
+		requestResultStruct = this->closeRoom(requestInfoStruct);
+		break;
+
+	case START_GAME_REQUEST:
+		requestResultStruct = this->startGame(requestInfoStruct);
+		break;
+
+	case GET_ROOM_STATE_REQUEST:
+		requestResultStruct = this->getRoomState(requestInfoStruct);
+		break;
+	}
+
+	return requestResultStruct;
+}
