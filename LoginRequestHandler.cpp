@@ -1,8 +1,5 @@
 #include "LoginRequestHandler.h"
 
-#define LOGIN_REQUEST 201
-#define SIGNUP_REQUEST 202
-
 LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& handlerFactory, LoginManager& loginManager)
 	: m_handlerFactory(handlerFactory), m_loginManager(loginManager)
 {}
