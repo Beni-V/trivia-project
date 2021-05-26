@@ -58,6 +58,30 @@ struct CreateRoomResponse
 	unsigned int status;
 };
 
+struct CloseRoomResponse
+{
+	unsigned int status;
+};
+
+struct StartGameResponse
+{
+	unsigned int status;
+};
+
+struct GetRoomStateResponse
+{
+	unsigned int status;
+	bool hasGameBegun;
+	std::vector<std::string> players;
+	unsigned int questionCount;
+	int answerTimeout;
+};
+
+struct LeaveRoomResponse
+{
+	unsigned int status;
+};
+
 class JsonResponsePacketSerializer
 {
 public:
