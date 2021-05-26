@@ -12,6 +12,16 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo requestInfoStrust)
 	return requestResultStruct;
 }
 
+RequestResult RoomAdminRequestHandler::startGame(RequestInfo requestInfoStrust)
+{
+	RequestResult requestResultStruct;
+
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(StartGameResponse{ SUCCSESS_RESPONSE }); // fill buffer with serialized response
+	requestResultStruct.newHandler = this; // fill newHandler with next handler
+
+	return requestResultStruct;
+}
+
 // will check if request id recieved from user is relevant
 bool RoomAdminRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
 {
