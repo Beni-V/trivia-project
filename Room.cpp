@@ -28,6 +28,11 @@ void Room::removeUser(LoggedUser user)
     }
 }
 
+int Room::getId()
+{
+    return this->m_metadata.id;
+}
+
 std::vector<std::string> Room::getAllUsers()
 {
     std::vector<std::string> usernames;

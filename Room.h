@@ -21,6 +21,7 @@ public:
 	Room(RoomData m_metadata);
 	void addUser(LoggedUser newUser);
 	void removeUser(LoggedUser user);
+	int getId();
 	std::vector<std::string> getAllUsers();
 
 private:

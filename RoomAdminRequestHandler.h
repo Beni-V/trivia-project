@@ -4,6 +4,8 @@
 #include "LoggedUser.h"
 #include "RoomManager.h"
 #include "RequestHandlerFactory.h"
+#include "JsonRequestPacketDeserializer.h"
+#include "JsonResponsePacketSerializer.h"
 
 class RoomAdminRequestHandler : public IRequestHandler
 {
