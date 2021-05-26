@@ -219,3 +219,23 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Close
 	}
 	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
 }
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(StartGameResponse SGR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(SGR.status);
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(SIGNUP_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
