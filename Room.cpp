@@ -28,6 +28,26 @@ void Room::removeUser(LoggedUser user)
     }
 }
 
+int Room::getId()
+{
+    return this->m_metadata.id;
+}
+
+bool Room::getIsActive()
+{
+    return this->m_metadata.isActive;
+}
+
+unsigned int Room::getQuestionsAmount()
+{
+    return this->m_metadata.numOfQuestionsInGame;
+}
+
+unsigned int Room::getQuestionTimeOut()
+{
+    return this->m_metadata.timePerQuestion;
+}
+
 std::vector<std::string> Room::getAllUsers()
 {
     std::vector<std::string> usernames;
