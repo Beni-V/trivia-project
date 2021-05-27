@@ -5,6 +5,10 @@
 #define ERROR_CODE 103
 #define BYTE 8
 #define SIZE_PART 4
+#define CLOSE_ROOM_RESPONSE_CODE 104
+#define START_GAME_RESPONSE_CODE 105
+#define GET_ROOM_STATE_RESPONSE_CODE 106
+#define LEAVE_ROOM_RESPONSE_CODE 107
 
 using json = nlohmann::json;
 
@@ -191,6 +195,91 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Creat
 
 	//append the message code and the message size to the response message
 	responseMessage.append(std::bitset<BYTE>(LOGIN_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(CloseRoomResponse CRR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(CRR.status);
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(CLOSE_ROOM_RESPONSE_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(StartGameResponse SGR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(SGR.status);
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(START_GAME_RESPONSE_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetRoomStateResponse GRR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(GRR.status);
+	jsonObject["hasGameBegun"] = GRR.hasGameBegun ? "true" : "false";
+	jsonObject["players"] = GRR.players;
+	jsonObject["questionCount"] = std::to_string(GRR.questionCount);
+	jsonObject["answerTimeout"] = std::to_string(GRR.answerTimeout);
+
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(GET_ROOM_STATE_RESPONSE_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(LeaveRoomResponse LRR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(LRR.status);
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(LEAVE_ROOM_RESPONSE_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
 
 	//append the message to the response message
 	for (int i = 0; i < message.size(); i++)
