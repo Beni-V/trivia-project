@@ -1,13 +1,5 @@
 #include "MenuRequestHandler.h"
 
-#define CREATE_ROOM_REQUEST 501
-#define GET_ROOMS_REQUEST 502
-#define GET_PLAYERS_IN_ROOM_REQUEST 503
-#define JOIN_ROOM_REQUEST 504
-#define GET_STATISTICS_REQUEST 505
-#define LOGOUT_REQUEST 506
-#define SUCCSESS_RESPONSE 1
-
 MenuRequestHandler::MenuRequestHandler(RoomManager& roomManager, StatisticsManager& statisticsManager, RequestHandlerFactory& handlerFactory): m_roomManager(roomManager), m_statisticsManager(statisticsManager), m_handlerFactory(handlerFactory)
 {
 }
