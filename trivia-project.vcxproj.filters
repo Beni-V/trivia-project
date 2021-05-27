@@ -69,6 +69,9 @@
     <ClInclude Include="RoomAdminRequestHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="RoomMemberRequestHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Communicator.cpp">
@@ -117,6 +120,9 @@
       <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="RoomAdminRequestHandler.cpp">
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomMemberRequestHandler.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
   </ItemGroup>
