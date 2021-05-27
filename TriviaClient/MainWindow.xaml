@@ -16,7 +16,7 @@
             <StackPanel>
                 <TextBlock Text="Wellcome to Tiriva app!." FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
                 <Grid Margin="0 20 0 20">
-                    <Button HorizontalAlignment="Left" Content="Sign in" Height="32" VerticalAlignment="Bottom"/>
+                    <Button HorizontalAlignment="Left" Content="Sign in" Height="32" Click="signInButtonClick" VerticalAlignment="Bottom"/>
                     <Button HorizontalAlignment="Right" Content="Sign up" Margin="0 0 300 0"/>
                 </Grid>
             </StackPanel>
