@@ -21,6 +21,10 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo requestInfoStru
 	return requestResultStruct;
 }
 
+RoomMemberRequestHandler::RoomMemberRequestHandler(Room room, LoggedUser user, RoomManager roomManager, RequestHandlerFactory handlerFactory) : m_room(room), m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
+{
+}
+
 // will check if request id is relevant for current state
 bool RoomMemberRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
 {

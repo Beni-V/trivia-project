@@ -22,6 +22,7 @@ public:
 	StatisticsManager& getStatisticsManager();
 	RoomManager& getRoomManager();
 
+
 private:
 	LoginManager m_loginManager;
 	RoomManager m_roomManager;
