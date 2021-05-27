@@ -19,7 +19,9 @@ private:
 	RequestResult startGame(RequestInfo requestInfoStrust);
 	RequestResult getRoomState(RequestInfo requestInfoStrust);
 
+
 public:
+	RoomAdminRequestHandler(RoomManager roomManager, Room room, LoggedUser user, RequestHandlerFactory RHF);
 	bool isRequestRelevant(RequestInfo requestInfoStruct);
 	RequestResult handleRequest(RequestInfo requestInfoStruct);
 

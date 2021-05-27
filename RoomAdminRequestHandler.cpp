@@ -32,6 +32,10 @@ RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo requestInfoStrus
 	return requestResultStruct;
 }
 
+RoomAdminRequestHandler::RoomAdminRequestHandler(RoomManager roomManager, Room room, LoggedUser user, RequestHandlerFactory RHF) :m_roomManager(roomManager), m_room(room), m_user(user), m_handlerFactory(RHF)
+{
+}
+
 // will check if request id recieved from user is relevant
 bool RoomAdminRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
 {
