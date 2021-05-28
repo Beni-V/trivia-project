@@ -25,11 +25,25 @@ namespace TriviaClient
             InitializeComponent();
         }
 
-        private void signInButtonClick(object sender, RoutedEventArgs e)
+        private void signInWellcomeButtonClick(object sender, RoutedEventArgs e)
         {
-            SignInWindow signInWindow = new SignInWindow();
-            signInWindow.Show();
-            this.Close();
+            wellcomeBorder.Visibility = Visibility.Hidden;
+            signInBorder.Visibility = Visibility.Visible;
+        }
+        private void signUpWellcomeButtonClick(object sender, RoutedEventArgs e)
+        {
+            wellcomeBorder.Visibility = Visibility.Hidden;
+            signUpBorder.Visibility = Visibility.Visible;
+        }
+        private void backSignInButtonClick(object sender, RoutedEventArgs e)
+        {
+            signInBorder.Visibility = Visibility.Hidden;
+            wellcomeBorder.Visibility = Visibility.Visible;
+        }
+        private void backSignUpButtonClick(object sender, RoutedEventArgs e)
+        {
+            signUpBorder.Visibility = Visibility.Hidden;
+            wellcomeBorder.Visibility = Visibility.Visible;
         }
     }
 }

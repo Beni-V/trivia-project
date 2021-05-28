@@ -6,18 +6,50 @@
         xmlns:local="clr-namespace:TriviaClient"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="Menu" Height="450" Width="800">
+        Title="Menu" Height="675" Width="1200">
     <Grid Background="#ffdadada">
-        <Border MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20">
+        <Border x:Name="wellcomeBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0">
                 </DropShadowEffect>
             </Border.Effect>
             <StackPanel>
-                <TextBlock Text="Wellcome to Tiriva app!." FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
+                <TextBlock Text="Wellcome to Tiriva app!" FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
                 <Grid Margin="0 20 0 20">
-                    <Button HorizontalAlignment="Left" Content="Sign in" Height="32" Click="signInButtonClick" VerticalAlignment="Bottom"/>
-                    <Button HorizontalAlignment="Right" Content="Sign up" Margin="0 0 300 0"/>
+                    <Button HorizontalAlignment="Left" Content="Sign in" Height="32" Click="signInWellcomeButtonClick" VerticalAlignment="Bottom"/>
+                    <Button HorizontalAlignment="Right" Content="Sign up" Margin="0 0 300 0" Click="signUpWellcomeButtonClick"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+        <Border x:Name="signInBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Hidden">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0">
+                </DropShadowEffect>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock Text="Wellcome, please sign in." FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
+                <TextBox materialDesign:HintAssist.Hint="Enter username" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                <PasswordBox materialDesign:HintAssist.Hint="Enter password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+                <Grid Margin="0 20 0 20">
+                    <Button HorizontalAlignment="Left" Content="Sign in"/>
+                    <Button HorizontalAlignment="Right" Content="Back" Style="{StaticResource MaterialDesignFlatButton}" Click="backSignInButtonClick"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+        <Border x:Name="signUpBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Hidden">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0">
+                </DropShadowEffect>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock Text="Wellcome, please sign up." FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
+                <TextBox materialDesign:HintAssist.Hint="Enter username" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                <PasswordBox materialDesign:HintAssist.Hint="Enter password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+                <PasswordBox materialDesign:HintAssist.Hint="Repeat password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+                <TextBox materialDesign:HintAssist.Hint="Enter email" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                <Grid Margin="0 20 0 20">
+                    <Button HorizontalAlignment="Left" Content="Sign up"/>
+                    <Button HorizontalAlignment="Right" Content="Back" Style="{StaticResource MaterialDesignFlatButton}" Click="backSignUpButtonClick"/>
                 </Grid>
             </StackPanel>
         </Border>
