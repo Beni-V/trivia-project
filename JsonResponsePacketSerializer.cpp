@@ -156,12 +156,44 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetPl
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetHighScoreResponse GHSR)
 {
-	return std::vector<unsigned char>();
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(GHSR.status);
+	jsonObject["HighScores"] = GHSR.statistics;
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(LOGIN_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
 }
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetPersonalStatsResponse GPSR)
 {
-	return std::vector<unsigned char>();
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(GPSR.status);
+	jsonObject["userStatistics"] = GPSR.statistics;
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(LOGIN_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
 }
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse JRR)
@@ -276,6 +308,117 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Leave
 
 	//create a message in format JSON
 	jsonObject["status"] = std::to_string(LRR.status);
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(LEAVE_ROOM_RESPONSE_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(LeaveGameResponse LGR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(LGR.status);
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(LEAVE_ROOM_RESPONSE_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetQuestionResponse GQR)
+{
+	json jsonObject;
+	std::string responseMessage;
+	std::string answers;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(GQR.status);
+	jsonObject["question"] = GQR.question;
+
+	std::map<unsigned int, std::string>::iterator it;
+	for (it = GQR.answers.begin(); it != GQR.answers.end(); it++)
+	{
+		if (it != GQR.answers.begin())
+		{
+			answers += ", ";
+		}
+		answers += std::to_string(it->first);
+		answers += "->";
+		answers += it->second;
+	}
+	jsonObject["answers"] = answers;
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(LEAVE_ROOM_RESPONSE_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(SubmitAnswerResponse SAR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(SAR.status);
+	jsonObject["answerID"] = std::to_string(SAR.correctAnswerId);
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(LEAVE_ROOM_RESPONSE_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetGameResultsResponse GGRR)
+{
+	json jsonObject;
+	std::string responseMessage;
+	std::string results;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(GGRR.status);
+
+	std::vector<PlayerResults>::iterator it;
+	for (it = GGRR.results.begin(); it != GGRR.results.end(); it++)
+	{
+		if (it != GGRR.results.begin())
+		{
+			results += ", ";
+		}
+		results += it->username + ";";
+		results += it->correctAnswerCount + ";";
+		results += it->wrongAnswerCount + ";";
+		results += it->averageAnswerTime;
+	}
+	jsonObject["results"] = results;
 	std::string message = jsonObject.dump();
 
 	//append the message code and the message size to the response message

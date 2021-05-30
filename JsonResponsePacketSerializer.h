@@ -5,6 +5,14 @@
 #include <bitset>
 #include "Room.h"
 
+struct PlayerResults
+{
+	std::string username;
+	unsigned int correctAnswerCount;
+	unsigned int wrongAnswerCount;
+	unsigned int averageAnswerTime;
+};
+
 struct LoginResponse
 {
 	unsigned int status;
@@ -82,6 +90,30 @@ struct LeaveRoomResponse
 	unsigned int status;
 };
 
+struct LeaveGameResponse
+{
+	unsigned int status;
+};
+
+struct GetQuestionResponse
+{
+	unsigned int status;
+	std::string question;
+	std::map<unsigned int, std::string> answers;
+};
+
+struct SubmitAnswerResponse
+{
+	unsigned int status;
+	unsigned int correctAnswerId;
+};
+
+struct GetGameResultsResponse
+{
+	unsigned int status;
+	std::vector<PlayerResults> results;
+};
+
 class JsonResponsePacketSerializer
 {
 public:
@@ -99,4 +131,8 @@ public:
 	static std::vector<unsigned char> serializeResponse(StartGameResponse SGR);
 	static std::vector<unsigned char> serializeResponse(GetRoomStateResponse GRR);
 	static std::vector<unsigned char> serializeResponse(LeaveRoomResponse LRR);
+	static std::vector<unsigned char> serializeResponse(LeaveGameResponse LGR);
+	static std::vector<unsigned char> serializeResponse(GetQuestionResponse GQR);
+	static std::vector<unsigned char> serializeResponse(SubmitAnswerResponse SAR);
+	static std::vector<unsigned char> serializeResponse(GetGameResultsResponse GGRR);
 };
