@@ -55,7 +55,7 @@ RequestResult LoginRequestHandler::login(RequestInfo info)
 	else
 	{
 		ErrorResponse errorResponse;
-		errorResponse.message = "ERROR";
+		errorResponse.message = "Password or username is incorrect.";
 
 		// fill RequestResult struct buffer with the server message
 		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(errorResponse);

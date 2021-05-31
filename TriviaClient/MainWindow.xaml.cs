@@ -29,6 +29,11 @@ namespace TriviaClient
         public string password { get; set; }
         public string email { get; set; }
     }
+    public class SignInRequest
+    {
+        public string username { get; set; }
+        public string password { get; set; }
+    }
 
     public partial class MainWindow : Window
     {
@@ -201,6 +206,30 @@ namespace TriviaClient
                 {
                     signUpErrorBox.Text = (string)response["message"];
                 }
+            }
+        }
+        private void signInButtonClick(object sender, RoutedEventArgs e)
+        {
+            signInErrorBox.Text = "";
+
+            SignInRequest signInRequest = new SignInRequest
+            {
+                username = signInUserNameBox.Text, password = signInPasswordBox.Password
+            };
+
+            string jsonDump = JsonConvert.SerializeObject(signInRequest, Formatting.Indented);
+
+            serializeAndSendMessage(LOGIN_REQUEST, jsonDump);
+            Dictionary<string, object> response = receiveAndDeserializeMessage();
+
+            if (response.ContainsKey("status") && (string)response["status"] == "1")
+            {
+                signInBorder.Visibility = Visibility.Hidden;
+                mainMenuBorder.Visibility = Visibility.Visible;
+            }
+            else if (response.ContainsKey("message"))
+            {
+                signInErrorBox.Text = (string)response["message"];
             }
         }
     }

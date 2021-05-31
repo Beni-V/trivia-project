@@ -28,10 +28,11 @@
             </Border.Effect>
             <StackPanel>
                 <TextBlock Text="Wellcome, please sign in." FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
-                <TextBox materialDesign:HintAssist.Hint="Enter username" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
-                <PasswordBox materialDesign:HintAssist.Hint="Enter password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+                <TextBlock x:Name="signInErrorBox" Text="" FontSize="15" Margin="0 0 0 1" Foreground="Red"/>
+                <TextBox x:Name="signInUserNameBox" materialDesign:HintAssist.Hint="Enter username" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                <PasswordBox x:Name="signInPasswordBox" materialDesign:HintAssist.Hint="Enter password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
                 <Grid Margin="0 20 0 20">
-                    <Button HorizontalAlignment="Left" Content="Sign in"/>
+                    <Button HorizontalAlignment="Left" Content="Sign in" Click="signInButtonClick"/>
                     <Button HorizontalAlignment="Right" Content="Back" Style="{StaticResource MaterialDesignFlatButton}" Click="backSignInButtonClick"/>
                 </Grid>
             </StackPanel>
