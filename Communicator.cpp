@@ -84,7 +84,7 @@ void Communicator::handleNewClients(SOCKET newClient)
 
 	// get the message code and message length from buffer (this lines are good, i checked it)
 	messageCode = std::stoi(std::string(Buffer.begin(), Buffer.end() - MESSAGE_LENGTH_SIZE), 0, BINARY_BASE);
-	messageLength = std::stoi(std::string(Buffer.begin() + MESSAGE_LENGTH_SIZE, Buffer.end()), 0, BINARY_BASE);
+	messageLength = std::stoi(std::string(Buffer.begin() + MESSAGE_CODE_SIZE, Buffer.end()), 0, BINARY_BASE);
 
 	// resize the buffer for the message (message length multiplied by 8 because the message stored in bits)
 	Buffer.resize(MINIMAL_BUFFER_SIZE + messageLength * AMOUNT_OF_BITS_IN_BYTE); 
@@ -112,16 +112,8 @@ void Communicator::handleNewClients(SOCKET newClient)
 	}
 	else // if message code is good
 	{
-		LoginResponse loginResponse;
-
-		/* 
-		* in this version, any request with relevant status will be responded like successed request
-		* but in next versions, the request will be deserialized and will be checked with the database
-		*/ 
-
-		loginResponse.status = SUCCESS_LOGIN_STATUS; 
-		serializedResponse = JsonResponsePacketSerializer::serializeResponse(loginResponse);
-		send(newClient, (char*)&serializedResponse[0], serializedResponse.size(), 0);
+		RequestResult response = this->m_clients.at(newClient)->handleRequest(requestInfo);
+		send(newClient, (char*)&response.Buffer[0], response.Buffer.size(), 0);
 	}
 	
 }

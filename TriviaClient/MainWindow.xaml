@@ -43,12 +43,13 @@
             </Border.Effect>
             <StackPanel>
                 <TextBlock Text="Wellcome, please sign up." FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
-                <TextBox materialDesign:HintAssist.Hint="Enter username" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
-                <PasswordBox materialDesign:HintAssist.Hint="Enter password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
-                <PasswordBox materialDesign:HintAssist.Hint="Repeat password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
-                <TextBox materialDesign:HintAssist.Hint="Enter email" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                <TextBlock x:Name="signUpErrorBox" Text="" FontSize="15" Margin="0 0 0 1" Foreground="Red"/>
+                <TextBox x:Name="signUpUserNameBox" materialDesign:HintAssist.Hint="Enter username" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
+                <PasswordBox x:Name="signUpPasswordBox" materialDesign:HintAssist.Hint="Enter password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+                <PasswordBox x:Name="signUpRepeatPasswordBox" materialDesign:HintAssist.Hint="Repeat password" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"/>
+                <TextBox x:Name="signUpEmailBox" materialDesign:HintAssist.Hint="Enter email" Style="{StaticResource MaterialDesignFloatingHintTextBox}"/>
                 <Grid Margin="0 20 0 20">
-                    <Button HorizontalAlignment="Left" Content="Sign up"/>
+                    <Button HorizontalAlignment="Left" Content="Sign up" Click="signUpButtonClick"/>
                     <Button HorizontalAlignment="Right" Content="Back" Style="{StaticResource MaterialDesignFlatButton}" Click="backSignUpButtonClick"/>
                 </Grid>
             </StackPanel>

@@ -27,11 +27,11 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo requestInfoStruct)
 
 	if (requestInfoStruct.requestId == LOGIN_REQUEST)
 	{
-		this->login(requestInfoStruct);
+		requestResultStruct = this->login(requestInfoStruct);
 	}
 	else if (requestInfoStruct.requestId == SIGNUP_REQUEST)
 	{
-		this->signup(requestInfoStruct);
+		requestResultStruct = this->signup(requestInfoStruct);
 	}	
 
 	return requestResultStruct;
@@ -83,7 +83,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo info)
 	else
 	{
 		ErrorResponse errorResponse;
-		errorResponse.message = "ERROR";
+		errorResponse.message = "User with this name is already exist.";
 
 		// fill RequestResult struct buffer with the server message
 		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(errorResponse);
