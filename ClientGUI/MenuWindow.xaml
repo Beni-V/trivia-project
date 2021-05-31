@@ -1,0 +1,41 @@
+﻿<Window x:Class="ClientGUI.MenuWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClientGUI"
+        mc:Ignorable="d"
+        Title="Trivia - Menu" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="6*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"><Bold>Welcome to Trivia Game!</Bold></TextBlock>
+        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"><Bold>What would you like to do:</Bold></TextBlock>
+        <StackPanel Grid.Row="2">
+            <Button x:Name="SignOut" Click="SignOut_Click" FontSize="20" HorizontalAlignment="Center" Margin="10" Width="150" >
+                <Bold>Sign out</Bold>
+            </Button>
+            <Button x:Name="JoinRoom" Click="JoinRoom_Click" FontSize="20" HorizontalAlignment="Center" Margin="10" Width="150" >
+                <Bold>Join room</Bold>
+            </Button>
+            <Button x:Name="CreateRoom" Click="CreateRoom_Click" FontSize="20" HorizontalAlignment="Center" Margin="10" Width="150" >
+                <Bold>Create room</Bold>
+            </Button>
+            <Button x:Name="MyStatus" Click="MyStatus_Click" FontSize="20" HorizontalAlignment="Center" Margin="10" Width="150" >
+                <Bold>My status</Bold>
+            </Button>
+            <Button x:Name="BestScore" Click="BestScore_Click" FontSize="20" HorizontalAlignment="Center" Margin="10" Width="150" >
+                <Bold>Best score</Bold>
+            </Button>
+            <Button x:Name="Quit" Click="Quit_Click" FontSize="20" HorizontalAlignment="Center" Margin="10" Width="80" >
+                <Bold>Quit</Bold>
+            </Button>
+        </StackPanel>
+
+        <Label Name="ErrorLabel" Content=" " Foreground="Red" FontSize="15" Grid.Row="4" Grid.Column="1" Margin="82,31,29,25"/>
+    </Grid>
+</Window>

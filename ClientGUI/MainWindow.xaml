@@ -1,0 +1,45 @@
+﻿<Window x:Class="ClientGUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ClientGUI"
+        mc:Ignorable="d"
+        Title="Trivia - Login" Height="450" Width="800">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"><Bold>Welcome to Trivia Game!</Bold></TextBlock>
+
+        <TextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="30">Username:</TextBlock>
+        <TextBox x:Name="usernameBox" Grid.Row="1" HorizontalAlignment="Right" Width="220"/>
+
+        <TextBlock Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="30">Password:</TextBlock>
+        <TextBox x:Name="passwordBox" Grid.Row="2" HorizontalAlignment="Right" Width="220"/>
+
+        <Button x:Name="Login" Click="Login_Click" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" FontSize="40" Margin="10">
+            <Bold>Login</Bold>
+        </Button>
+
+        <Button x:Name="Signup" Click="Signup_Click" Grid.Row="3" Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="30" Height="80" Width="150">
+            <Bold>Signup</Bold>
+        </Button>
+
+        <Button x:Name="Quit" Click="Quit_Click" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="10" FontSize="25" Width="80">
+            <Bold>Quit</Bold>
+        </Button>
+    </Grid>
+</Window>
