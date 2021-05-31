@@ -8,7 +8,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Menu" Height="675" Width="1200">
     <Grid Background="#ffdadada">
-        <Border x:Name="wellcomeBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20">
+        <Border x:Name="wellcomeBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Visible">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0">
                 </DropShadowEffect>
@@ -54,5 +54,25 @@
                 </Grid>
             </StackPanel>
         </Border>
+        <Border x:Name="mainMenuBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Hidden">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0">
+                </DropShadowEffect>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock Text="Menu" FontSize="30" FontWeight="Bold" Margin="0 0 0 20" HorizontalAlignment="Center"/>
+                <Button HorizontalAlignment="Center" Content="Create room" Margin="0 10" MinWidth="350"/>
+                <Button HorizontalAlignment="Center" Content="Join room" Margin="0 10" MinWidth="350"/>
+                <Button HorizontalAlignment="Center" Content="My status" Margin="0 10" MinWidth="350"/>
+                <Button HorizontalAlignment="Center" Content="Best scores" Margin="0 10" MinWidth="350"/>
+                
+
+                <Grid Margin="0 10 0 20">
+                    <Button HorizontalAlignment="Left" Content="Log out" Margin="60 10" Style="{StaticResource MaterialDesignFlatButton}"/>
+                    <Button HorizontalAlignment="Right" Content="Exit app" Margin="60 10" Style="{StaticResource MaterialDesignFlatButton}"/>
+                </Grid>
+            </StackPanel>
+        </Border>
+        
     </Grid>
 </Window>

@@ -162,6 +162,7 @@ namespace TriviaClient
         }
         private void signUpButtonClick(object sender, RoutedEventArgs e)
         {
+            signUpErrorBox.Foreground = Brushes.Red;
             if (signUpUserNameBox.Text.Length < 3)
             {
                 signUpErrorBox.Text = "User name must be at least 3 characters";
