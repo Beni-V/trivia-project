@@ -16,30 +16,17 @@ using System.Windows.Shapes;
 namespace ClientGUI
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for MyStatusWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MyStatusWindow : Window
     {
-        public MainWindow()
+        public MyStatusWindow()
         {
             InitializeComponent();
         }
 
-        private void Quit_Click(object sender, RoutedEventArgs e)
+        private void Return_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
-        }
-
-        private void Signup_Click(object sender, RoutedEventArgs e)
-        {
-            new SignupWindow().Show();
-            this.Close();
-        }
-
-        private void Login_Click(object sender, RoutedEventArgs e)
-        {
-            string username = usernameBox.Text;
-            string password = passwordBox.Text;
             new MenuWindow().Show();
             this.Close();
         }

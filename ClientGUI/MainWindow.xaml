@@ -25,10 +25,10 @@
         <TextBlock Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="40"><Bold>Welcome to Trivia Game!</Bold></TextBlock>
 
         <TextBlock Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="30">Username:</TextBlock>
-        <TextBox x:Name="usernameBox" Grid.Row="1" HorizontalAlignment="Right" Width="220"/>
+        <TextBox x:Name="usernameBox" Grid.Row="1" HorizontalAlignment="Right" Width="220" FontSize="30"/>
 
         <TextBlock Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="20,0,0,0" FontSize="30">Password:</TextBlock>
-        <TextBox x:Name="passwordBox" Grid.Row="2" HorizontalAlignment="Right" Width="220"/>
+        <TextBox x:Name="passwordBox" Grid.Row="2" HorizontalAlignment="Right" Width="220" FontSize="30"/>
 
         <Button x:Name="Login" Click="Login_Click" Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" FontSize="40" Margin="10">
             <Bold>Login</Bold>

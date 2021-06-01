@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClientGUI"
         mc:Ignorable="d"
-        Title="Trivia - Menu" Height="450" Width="800">
+        Title="Menu" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -28,14 +28,12 @@
             <Button x:Name="MyStatus" Click="MyStatus_Click" FontSize="20" HorizontalAlignment="Center" Margin="10" Width="150" >
                 <Bold>My status</Bold>
             </Button>
-            <Button x:Name="BestScore" Click="BestScore_Click" FontSize="20" HorizontalAlignment="Center" Margin="10" Width="150" >
-                <Bold>Best score</Bold>
+            <Button x:Name="BestScores" Click="BestScores_Click" FontSize="20" HorizontalAlignment="Center" Margin="10" Width="150" >
+                <Bold>Best scores</Bold>
             </Button>
             <Button x:Name="Quit" Click="Quit_Click" FontSize="20" HorizontalAlignment="Center" Margin="10" Width="80" >
                 <Bold>Quit</Bold>
             </Button>
         </StackPanel>
-
-        <Label Name="ErrorLabel" Content=" " Foreground="Red" FontSize="15" Grid.Row="4" Grid.Column="1" Margin="82,31,29,25"/>
     </Grid>
 </Window>
