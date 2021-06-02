@@ -125,7 +125,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 	this->m_roomManager.getRooms()[request.roomId].addUser(this->m_user); // add user to room
 
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse{ SUCCSESS_RESPONSE }); // fill buffer with serialized response
-	requestResultStruct.newHandler = this; // fill newHandler with next handler
+	requestResultStruct.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(this->m_roomManager.getRooms()[request.roomId], this->m_user); // fill newHandler with next handler
 
 	return requestResultStruct;
 }
@@ -138,7 +138,8 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 	this->m_roomManager.createRoom(this->m_user, RoomData{(unsigned int)(this->m_roomManager.getRooms().size() + 1), request.roomName, request.maxUsers, request.questionCount, request.answerTimeout, false}); // create room
 
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse{ SUCCSESS_RESPONSE });// fill buffer with serialized response
-	requestResultStruct.newHandler = this; // fill newHandler with next handler
+
+	requestResultStruct.newHandler = this->m_handlerFactory.createRoomAdminRequestHandler(this->m_roomManager, this->m_roomManager.getRooms()[(unsigned int)(this->m_roomManager.getRooms().size())], this->m_user); // fill newHandler with next handler
 
 	return requestResultStruct;
 }

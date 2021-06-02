@@ -323,17 +323,10 @@ namespace TriviaClient
         }
         public void updateParticipants(string roomName)
         {
-            int roomId = findRoomIdByName(roomName);
             while (true)
             { 
-                GetPlayersInRoomRequest getPlayersInRoomRequest = new GetPlayersInRoomRequest
-                {
-                    roomId = roomId
-                };
 
-                string jsonDump = JsonConvert.SerializeObject(getPlayersInRoomRequest, Formatting.Indented);
-
-                serializeAndSendMessage(GET_PLAYERS_IN_ROOM_REQUEST, jsonDump);
+                serializeAndSendMessage(GET_ROOM_STATE_REQUEST, "");
                 Dictionary<string, object> response = receiveAndDeserializeMessage();
                 if (response.ContainsKey("players"))
                 {
@@ -365,31 +358,6 @@ namespace TriviaClient
             }
         }
 
-        public int findRoomIdByName(string roomName)
-        {
-            serializeAndSendMessage(GET_ROOMS_REQUEST, "");
-            Dictionary<string, object> response = receiveAndDeserializeMessage();
-
-            Dictionary<int, string> rooms = new Dictionary<int, string>();
-
-            JArray Jrooms = (JArray)response["rooms"];
-
-
-            foreach (JArray room in Jrooms)
-            {
-                rooms.Add((int)room[0], (string)room[1]);
-            }
-
-            foreach (KeyValuePair<int, string> roomInDict in rooms)
-            {
-                if (roomInDict.Value == roomName)
-                {
-                    return roomInDict.Key;
-                }
-            }
-            return -1;
-        }
-
         private void createRoomBackButtonClick(object sender, RoutedEventArgs e)
         {
             createRoomBorder.Visibility = Visibility.Hidden;
@@ -399,5 +367,21 @@ namespace TriviaClient
         {
 
         }
+        private void adminPanelCloseRoomButtonClick(object sender, RoutedEventArgs e)
+        {
+            serializeAndSendMessage(CLOSE_ROOM_REQUEST, "");
+            Dictionary<string, object> response = receiveAndDeserializeMessage();
+
+            if (response.ContainsKey("status") && (string)response["status"] == "1")
+            {
+                createRoomAdminBorder.Visibility = Visibility.Hidden;
+                mainMenuBorder.Visibility = Visibility.Visible;
+            }
+            else if (response.ContainsKey("message"))
+            {
+                roomAdminPanelErrorBox.Text = (string)response["message"];
+            }
+        }
+        
     }
 }
