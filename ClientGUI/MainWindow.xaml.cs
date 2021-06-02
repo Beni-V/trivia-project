@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 
 namespace ClientGUI
 {
@@ -20,9 +21,17 @@ namespace ClientGUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Communicator communicator{ get; set;}
         public MainWindow()
+        { 
+            InitializeComponent();
+            this.communicator = new Communicator();
+        }
+
+        public MainWindow(Communicator communicator)
         {
             InitializeComponent();
+            this.communicator = communicator;
         }
 
         private void Quit_Click(object sender, RoutedEventArgs e)
@@ -32,16 +41,29 @@ namespace ClientGUI
 
         private void Signup_Click(object sender, RoutedEventArgs e)
         {
-            new SignupWindow().Show();
+            new SignupWindow(this.communicator).Show();
             this.Close();
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            string username = usernameBox.Text;
-            string password = passwordBox.Text;
-            new MenuWindow().Show();
+            var logInRequest = new LogInRequest
+            {
+                username = usernameBox.Text,
+                password = passwordBox.Text
+            };
+
+            communicator.SerializeAndSendMsg(JsonConvert.SerializeObject(logInRequest), 201);
+            communicator.RecvAndDeserializeMsg();
+
+            new MenuWindow(this.communicator).Show();
             this.Close();
+        }
+
+        public class LogInRequest
+        {
+            public string username { get; set; }
+            public string password { get; set; }
         }
     }
 }

@@ -20,14 +20,17 @@ namespace ClientGUI
     /// </summary>
     public partial class BestScoresWindow : Window
     {
-        public BestScoresWindow()
+        public Communicator communicator { get; set; }
+
+        public BestScoresWindow(Communicator communicator)
         {
             InitializeComponent();
+            this.communicator = communicator;
         }
 
         private void Return_Click(object sender, RoutedEventArgs e)
         {
-            new MenuWindow().Show();
+            new MenuWindow(this.communicator).Show();
             this.Close();
         }
     }

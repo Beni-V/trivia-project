@@ -18,7 +18,7 @@
             <Bold>List Of Rooms:</Bold>
         </TextBlock>
 
-        <ListBox Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="20" Height="250" Width="400"/>
+        <ListBox x:Name="Rooms" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="20" Height="250" Width="400"/>
         
         <Button x:Name="Join" Click="Join_Click" Grid.Row="2" HorizontalAlignment="Center" FontSize="20" Height="35" Width="125" Margin="10">
             <Bold>Join</Bold>

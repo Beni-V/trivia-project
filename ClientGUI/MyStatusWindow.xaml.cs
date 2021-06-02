@@ -20,14 +20,17 @@ namespace ClientGUI
     /// </summary>
     public partial class MyStatusWindow : Window
     {
-        public MyStatusWindow()
+        public Communicator communicator { get; set; }
+
+        public MyStatusWindow(Communicator communicator)
         {
             InitializeComponent();
+            this.communicator = communicator;
         }
 
         private void Return_Click(object sender, RoutedEventArgs e)
         {
-            new MenuWindow().Show();
+            new MenuWindow(this.communicator).Show();
             this.Close();
         }
     }

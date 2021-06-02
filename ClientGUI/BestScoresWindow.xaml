@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="BestScores" Height="450" Width="800">
 
-    <Grid>
+    <Grid Background="MediumPurple">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="6*" />
@@ -17,9 +17,9 @@
             <Bold>Best Scores:</Bold>
         </TextBlock>
 
-        <ListBox Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="20" Height="300" Width="500"/>
+        <ListBox Background ="BlueViolet" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="20" Height="300" Width="500"/>
 
-        <Button Name="Return" Click="Return_Click" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="20" Margin="10">
+        <Button x:Name="Return" Click="Return_Click" Background="BlueViolet" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="20" Margin="10">
             <Bold>Return</Bold>
         </Button>
     </Grid>

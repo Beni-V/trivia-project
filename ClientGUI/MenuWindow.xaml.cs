@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 
 namespace ClientGUI
 {
@@ -20,38 +21,42 @@ namespace ClientGUI
     /// </summary>
     public partial class MenuWindow : Window
     {
-        public MenuWindow()
+
+        public Communicator communicator { get; set; }
+
+        public MenuWindow(Communicator communicator)
         {
             InitializeComponent();
+            this.communicator = communicator;
         }
 
         private void SignOut_Click(object sender, RoutedEventArgs e)
         {
-            new MainWindow().Show();
+            new MainWindow(this.communicator).Show();
             this.Close();
         }
 
         private void JoinRoom_Click(object sender, RoutedEventArgs e)
         {
-            new JoinRoomWindow().Show();
+            new JoinRoomWindow(this.communicator).Show();
             this.Close();
         }
 
         private void CreateRoom_Click(object sender, RoutedEventArgs e)
         {
-            new CreateRoomWindow().Show();
+            new CreateRoomWindow(this.communicator).Show();
             this.Close();
         }
 
         private void MyStatus_Click(object sender, RoutedEventArgs e)
         {
-            new MyStatusWindow().Show();
+            new MyStatusWindow(this.communicator).Show();
             this.Close();
         }
 
         private void BestScores_Click(object sender, RoutedEventArgs e)
         {
-            new BestScoresWindow().Show();
+            new BestScoresWindow(this.communicator).Show();
             this.Close();
         }
 

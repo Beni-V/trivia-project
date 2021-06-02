@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Newtonsoft.Json;
 
 namespace ClientGUI
 {
@@ -20,20 +21,44 @@ namespace ClientGUI
     /// </summary>
     public partial class CreateRoomWindow : Window
     {
-        public CreateRoomWindow()
+        public Communicator communicator { get; set; }
+
+        public CreateRoomWindow(Communicator communicator)
         {
             InitializeComponent();
+            this.communicator = communicator;
         }
 
         private void CreateRoom_Click(object sender, RoutedEventArgs e)
         {
+            var createRoomRequest = new CreateRoomRequest
+            {
+                roomName = RoomNameBox.Text,
+                questionCount = QuestionsNumBox.Text,
+                maxUsers = PlayersNumBox.Text,
+                answerTimeout = TimeBox.Text
+            };
+
+            communicator.SerializeAndSendMsg(JsonConvert.SerializeObject(createRoomRequest), 504);
+            communicator.RecvAndDeserializeMsg();
+
+            new MenuWindow(this.communicator).Show();
             this.Close();
         }
 
         private void Return_Click(object sender, RoutedEventArgs e)
         {
-            new MenuWindow().Show();
+            new MenuWindow(this.communicator).Show();
             this.Close();
+        }
+
+        public class CreateRoomRequest
+        {
+            public string roomName { get; set; }
+            public string questionCount { get; set; }
+            public string maxUsers { get; set; }
+            public string answerTimeout { get; set; }
+
         }
     }
 }
