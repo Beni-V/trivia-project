@@ -14,9 +14,10 @@ class LoggedUser;
 class MenuRequestHandler : public IRequestHandler
 {
 public:
-	MenuRequestHandler(RoomManager& roomManager, StatisticsManager& statisticsManager, RequestHandlerFactory& handlerFactory);
+	MenuRequestHandler(RoomManager& roomManager, StatisticsManager& statisticsManager, RequestHandlerFactory& handlerFactory, LoggedUser user);
 	bool isRequestRelevant(RequestInfo info) override;
 	RequestResult handleRequest(RequestInfo info) override;
+
 private:
 	RequestResult signout(RequestInfo info);
 	RequestResult getRooms(RequestInfo info);

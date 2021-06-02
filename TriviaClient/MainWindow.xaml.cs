@@ -311,7 +311,7 @@ namespace TriviaClient
                     adminPanelPlayersAmountBox.Text = $"Max amount of players: {creatingRoomPlayersAmountBox.Text}";
                     adminPanelQuestionsAmountBox.Text = $"Time per question: {creatingRoomQuestionTimeBox.Text}";
 
-                    string text = adminPanelRoomNameBox.Text;
+                    string text = creatingRoomNameBox.Text;
                     Thread updateParticipantsThread = new Thread(() => updateParticipants(text));
                     updateParticipantsThread.Start();
                 }
@@ -337,9 +337,12 @@ namespace TriviaClient
                 Dictionary<string, object> response = receiveAndDeserializeMessage();
                 if (response.ContainsKey("players"))
                 {
-                    string[] players = (string[])response["players"];
-
-                    roomParticipants.Items.Clear();
+                    JArray Jplayers = (JArray)response["players"];
+                    string[] players = Jplayers.Select(jv => (string)jv).ToArray();
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        roomParticipants.Items.Clear();
+                    }));
 
                     for (int i = 0; i < players.Length; i++)
                     {
@@ -357,6 +360,8 @@ namespace TriviaClient
                         roomAdminPanelErrorBox.Text = (string)response["message"];
                     }));
                 }
+
+                Thread.Sleep(1000);
             }
         }
 
@@ -375,7 +380,14 @@ namespace TriviaClient
                 rooms.Add((int)room[0], (string)room[1]);
             }
 
-            return rooms.FirstOrDefault(x => x.Value == roomName).Key;
+            foreach (KeyValuePair<int, string> roomInDict in rooms)
+            {
+                if (roomInDict.Value == roomName)
+                {
+                    return roomInDict.Key;
+                }
+            }
+            return -1;
         }
 
         private void createRoomBackButtonClick(object sender, RoutedEventArgs e)

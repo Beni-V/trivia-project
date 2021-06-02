@@ -124,17 +124,13 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetRo
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetPlayersInRoomResponse GPIRR)
 {
 	json jsonObject;
-	std::string players;
+	std::vector<std::string> players;
 	std::string responseMessage;
 
 	//create a message in format JSON
 	for (int i = 0; i < GPIRR.players.size(); i++)
 	{
-		players += GPIRR.players[i];
-		if (i != GPIRR.players.size() - 1)
-		{
-			players += ", ";
-		}
+		players.push_back(GPIRR.players[i]);
 	}
 	jsonObject["players"] = players;
 
