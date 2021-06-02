@@ -82,19 +82,23 @@ void Communicator::handleNewClients(SOCKET newClient)
 		if (recv(newClient, (char*)&Buffer[0], MINIMAL_BUFFER_SIZE, 0) == SOCKET_ERROR)
 		{
 			std::cout << WSAGetLastError();
+			this->m_clients.erase(newClient);
+			break;
 		}
 
 		// get the message code and message length from buffer (this lines are good, i checked it)
 		messageCode = std::stoi(std::string(Buffer.begin(), Buffer.end() - MESSAGE_LENGTH_SIZE), 0, BINARY_BASE);
 		messageLength = std::stoi(std::string(Buffer.begin() + MESSAGE_CODE_SIZE, Buffer.end()), 0, BINARY_BASE);
+		if (messageLength > 0)
+		{ 
+			// resize the buffer for the message (message length multiplied by 8 because the message stored in bits)
+			Buffer.resize(MINIMAL_BUFFER_SIZE + messageLength * AMOUNT_OF_BITS_IN_BYTE);
 
-		// resize the buffer for the message (message length multiplied by 8 because the message stored in bits)
-		Buffer.resize(MINIMAL_BUFFER_SIZE + messageLength * AMOUNT_OF_BITS_IN_BYTE);
-
-		// receive the rest of the message (i guess that the trouble in  this expression : (char*)(&Buffer + 40))
-		if (recv(newClient, (char*)(&Buffer[MINIMAL_BUFFER_SIZE]), messageLength * AMOUNT_OF_BITS_IN_BYTE, 0) == SOCKET_ERROR)
-		{
-			std::cout << WSAGetLastError();
+			// receive the rest of the message (i guess that the trouble in  this expression : (char*)(&Buffer + 40))
+			if (recv(newClient, (char*)(&Buffer[MINIMAL_BUFFER_SIZE]), messageLength * AMOUNT_OF_BITS_IN_BYTE, 0) == SOCKET_ERROR)
+			{
+				std::cout << WSAGetLastError();
+			}
 		}
 
 		time(&currentTime); // get current time for field in request info
@@ -116,6 +120,7 @@ void Communicator::handleNewClients(SOCKET newClient)
 		{
 			RequestResult response = this->m_clients.at(newClient)->handleRequest(requestInfo);
 			send(newClient, (char*)&response.Buffer[0], response.Buffer.size(), 0);
+			this->m_clients[newClient] = response.newHandler;
 		}
 
 	}

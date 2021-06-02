@@ -78,7 +78,7 @@ RequestResult LoginRequestHandler::signup(RequestInfo info)
 		// fill RequestResult struct buffer with the server message
 		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(signupResponse);
 		// continue to the next step, Menu
-		requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler();
+		requestResultStruct.newHandler = this->m_handlerFactory.createLoginRequestHandler();
 	}
 	else
 	{

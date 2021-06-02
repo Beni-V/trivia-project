@@ -95,7 +95,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Logou
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetRoomsResponse GRR)
 {
 	json jsonObject;
-	std::string rooms;
+	std::map<int, std::string> rooms;
 	std::string responseMessage;
 
 	//create a message in format JSON
@@ -103,12 +103,9 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetRo
 
 	for (int i = 0; i < GRR.rooms.size(); i++)
 	{
-		rooms += GRR.rooms[i].name;
-		if (i != GRR.rooms.size() - 1)
-		{
-			rooms += ", ";
-		}
+		rooms.insert(std::pair<int, std::string>(GRR.rooms[i].id, GRR.rooms[i].name));
 	}
+
 	jsonObject["rooms"] = rooms;
 
 	std::string message = jsonObject.dump();
@@ -139,7 +136,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetPl
 			players += ", ";
 		}
 	}
-	jsonObject["playersInRoom"] = players;
+	jsonObject["players"] = players;
 
 	std::string message = jsonObject.dump();
 

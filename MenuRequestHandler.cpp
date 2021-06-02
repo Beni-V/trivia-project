@@ -70,8 +70,17 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 {
 	RequestResult requestResultStruct;
 
+	std::vector<RoomData> roomsData;
+
+	std::map<unsigned int, Room> rooms = this->m_roomManager.getRooms();
+
+	for (std::pair<unsigned int, Room> room : rooms)
+	{
+		roomsData.push_back(RoomData{ room.first, room.second.getName(), (unsigned int)room.second.getMaxPlayers(), (unsigned int)room.second.getQuestionsAmount(), (unsigned int)room.second.getQuestionTimeOut(), room.second.getIsActive() });
+	}
+
 	requestResultStruct.newHandler = new MenuRequestHandler(this->m_roomManager, this->m_statisticsManager, this->m_handlerFactory); // fill newHandler with next handler
-	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomsResponse{ SUCCSESS_RESPONSE }); // fill Buffer with serialized get rooms response
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomsResponse{ SUCCSESS_RESPONSE, roomsData}); // fill Buffer with serialized get rooms response
 	return requestResultStruct;
 }
 

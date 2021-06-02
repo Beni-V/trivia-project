@@ -38,6 +38,16 @@ bool Room::getIsActive()
     return this->m_metadata.isActive;
 }
 
+std::string Room::getName()
+{
+    return this->m_metadata.name;
+}
+
+int Room::getMaxPlayers()
+{
+    return this->m_metadata.maxPlayers;
+}
+
 unsigned int Room::getQuestionsAmount()
 {
     return this->m_metadata.numOfQuestionsInGame;

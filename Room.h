@@ -23,6 +23,8 @@ public:
 	void removeUser(LoggedUser user);
 	int getId();
 	bool getIsActive();
+	std::string getName();
+	int getMaxPlayers();
 	unsigned int getQuestionsAmount();
 	unsigned int getQuestionTimeOut();
 	std::vector<std::string> getAllUsers();

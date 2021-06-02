@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using Newtonsoft.Json;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
+using Newtonsoft.Json.Linq;
 
 namespace TriviaClient
 {
@@ -34,21 +36,31 @@ namespace TriviaClient
         public string username { get; set; }
         public string password { get; set; }
     }
-
+    public class CreateRoomRequest
+    {
+        public string roomName { get; set; }
+        public int maxUsers { get; set; }
+        public int questionCount { get; set; }
+        public int answerTimeout { get; set; }
+    }
+    public class GetPlayersInRoomRequest
+    {
+        public int roomId { get; set; }
+    }
     public partial class MainWindow : Window
     {
         public const int LOGIN_REQUEST = 201;
         public const int SIGNUP_REQUEST = 202;
-        public const int CREATE_ROOM_REQUEST = 501;
-        public const int GET_ROOMS_REQUEST = 502;
-        public const int GET_PLAYERS_IN_ROOM_REQUEST = 503;
-        public const int JOIN_ROOM_REQUEST = 504;
-        public const int GET_STATISTICS_REQUEST = 505;
-        public const int LOGOUT_REQUEST = 506;
-        public const int CLOSE_ROOM_REQUEST = 507;
-        public const int START_GAME_REQUEST = 508;
-        public const int GET_ROOM_STATE_REQUEST = 509;
-        public const int LEAVE_ROOM_REQUEST = 510;
+        public const int CREATE_ROOM_REQUEST = 91;
+        public const int GET_ROOMS_REQUEST = 92;
+        public const int GET_PLAYERS_IN_ROOM_REQUEST = 93;
+        public const int JOIN_ROOM_REQUEST = 94;
+        public const int GET_STATISTICS_REQUEST = 95;
+        public const int LOGOUT_REQUEST = 96;
+        public const int CLOSE_ROOM_REQUEST = 97;
+        public const int START_GAME_REQUEST = 98;
+        public const int GET_ROOM_STATE_REQUEST = 99;
+        public const int LEAVE_ROOM_REQUEST = 100;
         public const int SIGNUP_RESPONSE = 102;
         public const int ERROR_RESPONSE = 103;
         public const int BITS_IN_BYTE = 8;
@@ -231,6 +243,149 @@ namespace TriviaClient
             {
                 signInErrorBox.Text = (string)response["message"];
             }
+        }
+        private void mainMenuCreateRoomButtonClick(object sender, RoutedEventArgs e)
+        {
+            mainMenuBorder.Visibility = Visibility.Hidden;
+            createRoomBorder.Visibility = Visibility.Visible;
+        }
+        private void mainMenuJoinRoomButtonClick(object sender, RoutedEventArgs e)
+        {
+           
+        }
+        private void mainMenuShowStatusButtonClick(object sender, RoutedEventArgs e)
+        {
+           
+        }
+        private void mainMenuShowScoresButtonClick(object sender, RoutedEventArgs e)
+        {
+           
+        }
+        private void mainMenuLogOutButtonClick(object sender, RoutedEventArgs e)
+        {
+           
+        }
+        private void mainMenuExitButtonClick(object sender, RoutedEventArgs e)
+        {
+           
+        }
+        private void creatingRoomCreateRoomButtonClick(object sender, RoutedEventArgs e)
+        {
+            createRoomErrorBox.Text = "";
+            if (creatingRoomNameBox.Text.Length < 4)
+            {
+                createRoomErrorBox.Text = "Room name must be at least 4 characters.";
+            }
+            else if (Int16.Parse(creatingRoomPlayersAmountBox.Text) < 1)
+            {
+                createRoomErrorBox.Text = "Amount of players must be at least 1.";
+            }
+            else if (Int16.Parse(creatingRoomQuestionsAmountBox.Text) < 1)
+            {
+                createRoomErrorBox.Text = "Amount of questions must be at least 1.";
+            }
+            else if (Int16.Parse(creatingRoomQuestionTimeBox.Text) < 1)
+            {
+                createRoomErrorBox.Text = "Time for questions must be at least 1.";
+            }
+            else 
+            {
+                CreateRoomRequest createRoomRequest = new CreateRoomRequest
+                {
+                    roomName = creatingRoomNameBox.Text,
+                    maxUsers = Int16.Parse(creatingRoomPlayersAmountBox.Text),
+                    questionCount = Int16.Parse(creatingRoomQuestionsAmountBox.Text),
+                    answerTimeout = Int16.Parse(creatingRoomQuestionTimeBox.Text)
+                };
+
+                string jsonDump = JsonConvert.SerializeObject(createRoomRequest, Formatting.Indented);
+
+                serializeAndSendMessage(CREATE_ROOM_REQUEST, jsonDump);
+                Dictionary<string, object> response = receiveAndDeserializeMessage();
+
+                if (response.ContainsKey("status") && (string)response["status"] == "1")
+                {
+                    createRoomBorder.Visibility = Visibility.Hidden;
+                    createRoomAdminBorder.Visibility = Visibility.Visible;
+                    adminPanelRoomNameBox.Text = $"Room name: {creatingRoomNameBox.Text}";
+                    adminPanelPlayersAmountBox.Text = $"Max amount of players: {creatingRoomPlayersAmountBox.Text}";
+                    adminPanelQuestionsAmountBox.Text = $"Time per question: {creatingRoomQuestionTimeBox.Text}";
+
+                    string text = adminPanelRoomNameBox.Text;
+                    Thread updateParticipantsThread = new Thread(() => updateParticipants(text));
+                    updateParticipantsThread.Start();
+                }
+                else if (response.ContainsKey("message"))
+                {
+                    createRoomErrorBox.Text = (string)response["message"];
+                }
+            }
+        }
+        public void updateParticipants(string roomName)
+        {
+            int roomId = findRoomIdByName(roomName);
+            while (true)
+            { 
+                GetPlayersInRoomRequest getPlayersInRoomRequest = new GetPlayersInRoomRequest
+                {
+                    roomId = roomId
+                };
+
+                string jsonDump = JsonConvert.SerializeObject(getPlayersInRoomRequest, Formatting.Indented);
+
+                serializeAndSendMessage(GET_PLAYERS_IN_ROOM_REQUEST, jsonDump);
+                Dictionary<string, object> response = receiveAndDeserializeMessage();
+                if (response.ContainsKey("players"))
+                {
+                    string[] players = (string[])response["players"];
+
+                    roomParticipants.Items.Clear();
+
+                    for (int i = 0; i < players.Length; i++)
+                    {
+                        this.Dispatcher.Invoke((Action)(() =>
+                        {
+                            roomParticipants.Items.Add(new Label().Content = players[i]);
+                        }));
+                    }
+
+                }
+                else if (response.ContainsKey("message"))
+                {
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        roomAdminPanelErrorBox.Text = (string)response["message"];
+                    }));
+                }
+            }
+        }
+
+        public int findRoomIdByName(string roomName)
+        {
+            serializeAndSendMessage(GET_ROOMS_REQUEST, "");
+            Dictionary<string, object> response = receiveAndDeserializeMessage();
+
+            Dictionary<int, string> rooms = new Dictionary<int, string>();
+
+            JArray Jrooms = (JArray)response["rooms"];
+
+
+            foreach (JArray room in Jrooms)
+            {
+                rooms.Add((int)room[0], (string)room[1]);
+            }
+
+            return rooms.FirstOrDefault(x => x.Value == roomName).Key;
+        }
+
+        private void createRoomBackButtonClick(object sender, RoutedEventArgs e)
+        {
+            createRoomBorder.Visibility = Visibility.Hidden;
+            mainMenuBorder.Visibility = Visibility.Visible;
+        }
+        private void createRoomButtonClick(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
