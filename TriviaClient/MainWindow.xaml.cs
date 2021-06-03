@@ -65,6 +65,7 @@ namespace TriviaClient
         public const int START_GAME_REQUEST = 98;
         public const int GET_ROOM_STATE_REQUEST = 99;
         public const int LEAVE_ROOM_REQUEST = 100;
+        public const int GET_HIGH_SCORES_REQUEST = 101;
         public const int SIGNUP_RESPONSE = 102;
         public const int ERROR_RESPONSE = 103;
         public const int BITS_IN_BYTE = 8;
@@ -365,7 +366,28 @@ namespace TriviaClient
         }
         private void mainMenuShowScoresButtonClick(object sender, RoutedEventArgs e)
         {
-           
+            bestPlayersList.Items.Clear();
+
+            mainMenuBorder.Visibility = Visibility.Hidden;
+            scoresBorder.Visibility = Visibility.Visible;
+
+            serializeAndSendMessage(GET_HIGH_SCORES_REQUEST, "");
+            Dictionary<string, object> response = receiveAndDeserializeMessage();
+
+            if (response.ContainsKey("status") && (string)response["status"] == "1")
+            {
+                JArray bestPlayers = (JArray)response["statistics"];
+
+                foreach (string player in bestPlayers)
+                {
+                    bestPlayersList.Items.Add(new Label().Content = player);
+                }
+            }
+            else if (response.ContainsKey("message"))
+            {
+                scoresErrorBox.Text = (string)response["message"];
+            }
+
         }
         private void mainMenuLogOutButtonClick(object sender, RoutedEventArgs e)
         {
@@ -520,6 +542,11 @@ namespace TriviaClient
         private void createRoomButtonClick(object sender, RoutedEventArgs e)
         {
 
+        }
+        private void scoresExitButtonClick(object sender, RoutedEventArgs e)
+        {
+            scoresBorder.Visibility = Visibility.Hidden;
+            mainMenuBorder.Visibility = Visibility.Visible;
         }
         private void memberPanelExitRoomButtonClick(object sender, RoutedEventArgs e)
         {

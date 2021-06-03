@@ -19,8 +19,14 @@ std::vector<std::string> StatisticsManager::getHighScore()
 			}
 		}
 	}
-
-	return std::vector<std::string>(userNames.begin(), userNames.begin() + 5);
+	if (userNames.size() > 3)
+	{
+		return std::vector<std::string>(userNames.begin(), userNames.begin() + 3);
+	}
+	else
+	{
+		return userNames;
+	}
 }
 
 std::vector<std::string> StatisticsManager::getUserStatistics(std::string userName)

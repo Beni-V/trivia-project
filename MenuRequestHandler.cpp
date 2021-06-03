@@ -12,7 +12,8 @@ bool MenuRequestHandler::isRequestRelevant(RequestInfo info)
 		info.requestId == GET_PLAYERS_IN_ROOM_REQUEST ||
 		info.requestId == JOIN_ROOM_REQUEST ||
 		info.requestId == GET_STATISTICS_REQUEST ||
-		info.requestId == LOGOUT_REQUEST)
+		info.requestId == LOGOUT_REQUEST ||
+		info.requestId == GET_HIGH_SCORES_REQUEST)
 	{
 		return true;
 	}
@@ -50,6 +51,10 @@ RequestResult MenuRequestHandler::handleRequest(RequestInfo info)
 
 	case LOGOUT_REQUEST:
 		requestResultStruct = this->signout(info);
+		break;
+
+	case GET_HIGH_SCORES_REQUEST:
+		requestResultStruct = this->getHighScore(info);
 		break;
 	}
 

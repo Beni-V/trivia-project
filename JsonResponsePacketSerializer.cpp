@@ -10,6 +10,7 @@
 #define GET_ROOM_STATE_RESPONSE_CODE 106
 #define LEAVE_ROOM_RESPONSE_CODE 107
 #define GET_STATISTICS_RESPONSE_CODE 108
+#define GET_HIGH_SCORES_RESPONSE_CODE 109
 
 using json = nlohmann::json;
 
@@ -150,7 +151,30 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetPl
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetHighScoreResponse GHSR)
 {
-	return std::vector<unsigned char>();
+	json jsonObject;
+	std::vector<std::string> statistics;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	for (int i = 0; i < GHSR.statistics.size(); i++)
+	{
+		statistics.push_back(GHSR.statistics[i]);
+	}
+	jsonObject["statistics"] = statistics;
+	jsonObject["status"] = std::to_string(GHSR.status);
+
+
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(GET_HIGH_SCORES_RESPONSE_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
 }
 
 std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetPersonalStatsResponse GPSR)
