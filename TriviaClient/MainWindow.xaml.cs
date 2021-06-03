@@ -75,6 +75,7 @@ namespace TriviaClient
 
         public Thread updateParticipantsForAdminThread;
         public Thread updateParticipantsForMemberThread;
+        public Thread refreshRoomsListThread;
 
         public static NetworkStream clientStream;
 
@@ -261,42 +262,53 @@ namespace TriviaClient
             mainMenuBorder.Visibility = Visibility.Hidden;
             roomsListBorder.Visibility = Visibility.Visible;
 
-            refreshRoomList();
+            refreshRoomsListThread = new Thread(refreshRoomList);
+            refreshRoomsListThread.Start();
 
         }
 
         public void refreshRoomList()
         {
-            serializeAndSendMessage(GET_ROOMS_REQUEST, "");
-            Dictionary<string, object> response = receiveAndDeserializeMessage();
-
-            if (response.ContainsKey("status") && (string)response["status"] == "1")
+            while (true)
             {
-                roomsList.Items.Clear();
-                Dictionary<int, string> rooms = new Dictionary<int, string>();
+                serializeAndSendMessage(GET_ROOMS_REQUEST, "");
+                Dictionary<string, object> response = receiveAndDeserializeMessage();
 
-                JArray Jrooms = (JArray)response["rooms"];
-
-
-                foreach (JArray room in Jrooms)
+                if (response.ContainsKey("status") && (string)response["status"] == "1")
                 {
-                    rooms.Add((int)room[0], (string)room[1]);
-                }
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        roomsList.Items.Clear();
+                    }));
 
-                foreach (KeyValuePair<int, string> roomInDict in rooms)
+                    Dictionary<int, string> rooms = new Dictionary<int, string>();
+
+                    JArray Jrooms = (JArray)response["rooms"];
+
+
+                    foreach (JArray room in Jrooms)
+                    {
+                        rooms.Add((int)room[0], (string)room[1]);
+                    }
+
+                    foreach (KeyValuePair<int, string> roomInDict in rooms)
+                    {
+                        this.Dispatcher.Invoke((Action)(() =>
+                        {
+                            roomsList.Items.Add(new Label().Content = $"{roomInDict.Key}: {roomInDict.Value}");
+                        }));
+                    }
+
+                }
+                else if (response.ContainsKey("message"))
                 {
-                    roomsList.Items.Add(new Label().Content = $"{roomInDict.Key}: {roomInDict.Value}");
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        roomsListErrorBox.Text = (string)response["message"];
+                    }));
                 }
-
+                Thread.Sleep(3000);
             }
-            else if (response.ContainsKey("message"))
-            {
-                roomsListErrorBox.Text = (string)response["message"];
-            }
-        }
-        private void refreshRoomsListButtonClick(object sender, RoutedEventArgs e)
-        {
-            refreshRoomList();
         }
         private void roomListBackButtonClick(object sender, RoutedEventArgs e)
         {
