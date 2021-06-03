@@ -90,7 +90,16 @@ namespace TriviaClient
         {
             TcpClient client = new TcpClient();
             IPEndPoint serverEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 5150);
-            client.Connect(serverEndPoint);
+            try
+            {
+                client.Connect(serverEndPoint);
+            }
+            catch
+            {
+                MessageBox.Show("Error. You should run the server first.");
+                System.Windows.Application.Current.Shutdown();
+                System.Environment.Exit(0);
+            }
             clientStream = client.GetStream();
         }
 
@@ -260,6 +269,8 @@ namespace TriviaClient
         }
         private void mainMenuJoinRoomButtonClick(object sender, RoutedEventArgs e)
         {
+            roomsListErrorBox.Text = "";
+
             mainMenuBorder.Visibility = Visibility.Hidden;
             roomsListBorder.Visibility = Visibility.Visible;
 
@@ -272,6 +283,10 @@ namespace TriviaClient
         {
             while (true)
             {
+                this.Dispatcher.Invoke((Action)(() =>
+                {
+                    roomsListErrorBox.Text = "";
+                }));
                 serializeAndSendMessage(GET_ROOMS_REQUEST, "");
                 Dictionary<string, object> response = receiveAndDeserializeMessage();
 
@@ -495,7 +510,7 @@ namespace TriviaClient
                     }));
                 }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(3000);
             }
         }public void updateParticipantsForMember()
         {
@@ -537,7 +552,7 @@ namespace TriviaClient
                     }));
                 }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(3000);
             }
         }
 
@@ -557,6 +572,7 @@ namespace TriviaClient
         }
         private void memberPanelExitRoomButtonClick(object sender, RoutedEventArgs e)
         {
+            roomsListErrorBox.Text = "";
             serializeAndSendMessage(LEAVE_ROOM_REQUEST, "");
             Dictionary<string, object> response = receiveAndDeserializeMessage();
 
@@ -585,6 +601,5 @@ namespace TriviaClient
                 roomAdminPanelErrorBox.Text = (string)response["message"];
             }
         }
-        
     }
 }
