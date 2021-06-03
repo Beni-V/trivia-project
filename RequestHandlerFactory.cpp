@@ -2,13 +2,13 @@
 
 LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {
-    LoginRequestHandler* loginHandler = new LoginRequestHandler(*this, getLoginManager());
+    LoginRequestHandler* loginHandler = new LoginRequestHandler(*this);
     return loginHandler;
 }
 
-MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler()
+MenuRequestHandler* RequestHandlerFactory::createMenuRequestHandler(LoggedUser user)
 {
-    MenuRequestHandler* menuHandler = new MenuRequestHandler(this->getRoomManager(), this->getStatisticsManager(), *this);
+    MenuRequestHandler* menuHandler = new MenuRequestHandler(*this, user);
     return menuHandler;
 }
 
@@ -24,16 +24,16 @@ StatisticsManager& RequestHandlerFactory::getStatisticsManager()
 
 RoomManager& RequestHandlerFactory::getRoomManager()
 {
-    return this->m_roomManager;
+	return this->m_roomManager;
 }
 
-RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(Room room, LoggedUser user)
+RoomAdminRequestHandler* RequestHandlerFactory::createRoomAdminRequestHandler(Room& room, LoggedUser& user)
 {
-    return new RoomAdminRequestHandler(this->m_roomManager, room, user, *this);
+    return new RoomAdminRequestHandler(*this, room, user);
 }
 
-RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(Room room, LoggedUser user)
+RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(Room& room, LoggedUser& user)
 {
-    return new RoomMemberRequestHandler(room, user, this->m_roomManager, *this);
+    return new RoomMemberRequestHandler(*this, room, user);
 }
 

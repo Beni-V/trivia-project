@@ -24,6 +24,7 @@ void Room::removeUser(LoggedUser user)
         if (*it == user)
         {
             this->_participates.erase(it);
+            break;
         }
     }
 }
@@ -36,6 +37,16 @@ int Room::getId()
 bool Room::getIsActive()
 {
     return this->m_metadata.isActive;
+}
+
+std::string Room::getName()
+{
+    return this->m_metadata.name;
+}
+
+int Room::getMaxPlayers()
+{
+    return this->m_metadata.maxPlayers;
 }
 
 unsigned int Room::getQuestionsAmount()

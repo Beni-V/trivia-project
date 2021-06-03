@@ -1,7 +1,7 @@
 #include "LoginRequestHandler.h"
 
-LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& handlerFactory, LoginManager& loginManager)
-	: m_handlerFactory(handlerFactory), m_loginManager(loginManager)
+LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& handlerFactory)
+	: m_handlerFactory(handlerFactory), m_loginManager(handlerFactory.getLoginManager())
 {}
 
 // function will return true if the code message is relevant and false if its not
@@ -27,11 +27,11 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo requestInfoStruct)
 
 	if (requestInfoStruct.requestId == LOGIN_REQUEST)
 	{
-		this->login(requestInfoStruct);
+		requestResultStruct = this->login(requestInfoStruct);
 	}
 	else if (requestInfoStruct.requestId == SIGNUP_REQUEST)
 	{
-		this->signup(requestInfoStruct);
+		requestResultStruct = this->signup(requestInfoStruct);
 	}	
 
 	return requestResultStruct;
@@ -50,12 +50,12 @@ RequestResult LoginRequestHandler::login(RequestInfo info)
 		// fill RequestResult struct buffer with the server message
 		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(loginResponse);
 		// continue to the next step, Menu
-		requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler();
+		requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(info.buffer).username));
 	}
 	else
 	{
 		ErrorResponse errorResponse;
-		errorResponse.message = "ERROR";
+		errorResponse.message = "Password or username is incorrect.";
 
 		// fill RequestResult struct buffer with the server message
 		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(errorResponse);
@@ -78,12 +78,12 @@ RequestResult LoginRequestHandler::signup(RequestInfo info)
 		// fill RequestResult struct buffer with the server message
 		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(signupResponse);
 		// continue to the next step, Menu
-		requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler();
+		requestResultStruct.newHandler = this->m_handlerFactory.createLoginRequestHandler();
 	}
 	else
 	{
 		ErrorResponse errorResponse;
-		errorResponse.message = "ERROR";
+		errorResponse.message = "User with this name is already exist.";
 
 		// fill RequestResult struct buffer with the server message
 		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(errorResponse);
