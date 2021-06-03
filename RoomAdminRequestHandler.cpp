@@ -7,7 +7,7 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo requestInfoStrust)
 	this->m_roomManager.deleteRoom(this->m_room.getId());
 
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(CloseRoomResponse{SUCCSESS_RESPONSE}); // fill buffer with serialized response
-	requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_roomManager, this->m_user); // fill newHandler with next handler
+	requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_user); // fill newHandler with next handler
 
 	return requestResultStruct;
 }
@@ -32,7 +32,7 @@ RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo requestInfoStrus
 	return requestResultStruct;
 }
 
-RoomAdminRequestHandler::RoomAdminRequestHandler(RoomManager& roomManager, Room& room, LoggedUser user, RequestHandlerFactory RHF) :m_roomManager(roomManager), m_room(room), m_user(user), m_handlerFactory(RHF)
+RoomAdminRequestHandler::RoomAdminRequestHandler(RequestHandlerFactory& handlerFactory, Room& room, LoggedUser& user) :m_roomManager(handlerFactory.getRoomManager()), m_room(room), m_user(user), m_handlerFactory(handlerFactory)
 {
 }
 

@@ -1,7 +1,7 @@
 #include "LoginRequestHandler.h"
 
-LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& handlerFactory, LoginManager& loginManager)
-	: m_handlerFactory(handlerFactory), m_loginManager(loginManager)
+LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& handlerFactory)
+	: m_handlerFactory(handlerFactory), m_loginManager(handlerFactory.getLoginManager())
 {}
 
 // function will return true if the code message is relevant and false if its not
@@ -50,7 +50,7 @@ RequestResult LoginRequestHandler::login(RequestInfo info)
 		// fill RequestResult struct buffer with the server message
 		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(loginResponse);
 		// continue to the next step, Menu
-		requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_handlerFactory.getRoomManager(), LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(info.buffer).username));
+		requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(LoggedUser(JsonRequestPacketDeserializer::deserializeLoginRequest(info.buffer).username));
 	}
 	else
 	{

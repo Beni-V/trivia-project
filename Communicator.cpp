@@ -132,7 +132,7 @@ void Communicator::startHandleRequests()
 	SOCKET newClientSocket;
 	RequestHandlerFactory* handlerFactory = new RequestHandlerFactory();
 	LoginManager* loginManager = new LoginManager();
-	IRequestHandler* userRequestHandler = new LoginRequestHandler(*handlerFactory, *loginManager);
+	IRequestHandler* userRequestHandler = new LoginRequestHandler(*handlerFactory);
 
 	bindAndListen();
 

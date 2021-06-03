@@ -21,7 +21,7 @@ private:
 
 
 public:
-	RoomAdminRequestHandler(RoomManager& roomManager, Room& room, LoggedUser user, RequestHandlerFactory RHF);
+	RoomAdminRequestHandler(RequestHandlerFactory& handlerFactory, Room& room, LoggedUser& user);
 	bool isRequestRelevant(RequestInfo requestInfoStruct);
 	RequestResult handleRequest(RequestInfo requestInfoStruct);
 

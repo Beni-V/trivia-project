@@ -1,6 +1,6 @@
 #include "MenuRequestHandler.h"
 
-MenuRequestHandler::MenuRequestHandler(RoomManager& roomManager, StatisticsManager& statisticsManager, RequestHandlerFactory& handlerFactory, LoggedUser user): m_roomManager(roomManager), m_statisticsManager(statisticsManager), m_handlerFactory(handlerFactory), m_user(user)
+MenuRequestHandler::MenuRequestHandler(RequestHandlerFactory& handlerFactory, LoggedUser user): m_roomManager(handlerFactory.getRoomManager()), m_statisticsManager(handlerFactory.getStatisticsManager()), m_handlerFactory(handlerFactory), m_user(user)
 {
 }
 
@@ -125,7 +125,7 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 	this->m_roomManager.addUserToRoom(request.roomId, this->m_user);
 
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse{ SUCCSESS_RESPONSE }); // fill buffer with serialized response
-	requestResultStruct.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(this->m_handlerFactory.getRoomManager().getRooms()[request.roomId], this->m_user, this->m_roomManager); // fill newHandler with next handler
+	requestResultStruct.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(this->m_handlerFactory.getRoomManager().getRooms()[request.roomId], this->m_user); // fill newHandler with next handler
 
 	return requestResultStruct;
 }

@@ -17,12 +17,12 @@ class RequestHandlerFactory
 {
 public:
 	LoginRequestHandler* createLoginRequestHandler();
-	MenuRequestHandler* createMenuRequestHandler(RoomManager& roomManager, LoggedUser user);
+	MenuRequestHandler* createMenuRequestHandler(LoggedUser user);
 	LoginManager& getLoginManager();
 	StatisticsManager& getStatisticsManager();
 	RoomManager& getRoomManager();
-	RoomAdminRequestHandler* createRoomAdminRequestHandler(Room& room, LoggedUser user);
-	RoomMemberRequestHandler* createRoomMemberRequestHandler(Room& room, LoggedUser user, RoomManager& roomManager);
+	RoomAdminRequestHandler* createRoomAdminRequestHandler(Room& room, LoggedUser& user);
+	RoomMemberRequestHandler* createRoomMemberRequestHandler(Room& room, LoggedUser& user);
 
 
 private:
