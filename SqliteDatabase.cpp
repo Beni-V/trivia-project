@@ -135,6 +135,9 @@ void SqliteDatabase::addNewUser(std::string userName, std::string password, std:
 {
     std::string sqlStatement = "INSERT INTO USERS(USERNAME, PASSWORD, EMAIL) VALUES('" + userName + "', '" + password + "', '" + email + "');";
     sendSqlStatement(sqlStatement, NULL, NULL);
+
+    sqlStatement = "INSERT INTO STATISTICS(USERNAME, AVG_ANSWER_TIME, CORRECT_ANSWERS_AMOUNT, TOTAL_ANSWERS_AMOUNT, GAMES_DONE_AMOUNT) VALUES('" + userName + "', 0.0, 0, 0, 0);";
+    sendSqlStatement(sqlStatement, NULL, NULL);
 }
 
 // this function is used to send sql requests and check it for errors, also supports to get callback function and return responses

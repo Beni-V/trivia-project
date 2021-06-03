@@ -319,10 +319,22 @@ namespace TriviaClient
         {
             mainMenuBorder.Visibility = Visibility.Hidden;
             statusBorder.Visibility = Visibility.Visible;
-            statusGamesAmountBox.Text = $"Number of played games: 0";
-            statusRightAnswersAmountBox.Text = $"Amount of right answers: 0";
-            statusWrongAnswersAmountBox.Text = $"Amount of total answers: 0";
-            statusAverageAnswerTimeBox.Text = $"Average time for answer: 0";
+
+            serializeAndSendMessage(GET_STATISTICS_REQUEST, "");
+            Dictionary<string, object> response = receiveAndDeserializeMessage();
+
+            if (response.ContainsKey("status") && (string)response["status"] == "1")
+            {
+                JArray Jstatistics = (JArray)response["statistics"];
+                statusGamesAmountBox.Text = $"Number of played games: {Jstatistics[3]}";
+                statusRightAnswersAmountBox.Text = $"Amount of right answers: {Jstatistics[1]}";
+                statusWrongAnswersAmountBox.Text = $"Amount of total answers: {Jstatistics[2]}";
+                statusAverageAnswerTimeBox.Text = $"Average time for answer: {Jstatistics[0]}";
+            }
+            else if (response.ContainsKey("message"))
+            {
+                statusErrorBox.Text = (string)response["message"];
+            }
         }
         private void roomListJoinRoomButtonClick(object sender, RoutedEventArgs e)
         {
