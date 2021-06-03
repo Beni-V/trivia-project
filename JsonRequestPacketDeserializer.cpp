@@ -129,10 +129,10 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(st
 	deserializedJsonObject = json::parse(deserializedJsonMessage); // parse json string into json object
 
 	// built the struct that will be returned
-	result.answerTimeout = deserializedJsonObject["answerTimeout"];
-	result.maxUsers = deserializedJsonObject["maxUsers"];
-	result.questionCount = deserializedJsonObject["questionCount"];
 	result.roomName = deserializedJsonObject["roomName"];
+	result.questionCount = deserializedJsonObject["questionCount"];
+	result.maxUsers = deserializedJsonObject["maxUsers"];
+	result.answerTimeout = deserializedJsonObject["answerTimeout"];
 
 	return result;
 }

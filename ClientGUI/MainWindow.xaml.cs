@@ -54,10 +54,18 @@ namespace ClientGUI
             };
 
             communicator.SerializeAndSendMsg(JsonConvert.SerializeObject(logInRequest), 201);
-            communicator.RecvAndDeserializeMsg();
+            Dictionary<string, string> answerMsg = communicator.RecvAndDeserializeMsg();
 
-            new MenuWindow(this.communicator).Show();
-            this.Close();
+            if (answerMsg["code"] == Constants.ERROR_CODE)
+            {
+                Error.Text = answerMsg["message"];
+            }
+            else
+            {
+                this.communicator.username = logInRequest.username;
+                new MenuWindow(this.communicator).Show();
+                this.Close();
+            }
         }
 
         public class LogInRequest

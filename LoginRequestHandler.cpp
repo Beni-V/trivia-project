@@ -7,11 +7,7 @@ LoginRequestHandler::LoginRequestHandler(RequestHandlerFactory& handlerFactory, 
 // function will return true if the code message is relevant and false if its not
 bool LoginRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
 {
-	if (requestInfoStruct.requestId == LOGIN_REQUEST)
-	{
-		return true;
-	}
-	else if (requestInfoStruct.requestId == SIGNUP_REQUEST)
+	if (requestInfoStruct.requestId == LOGIN_REQUEST || requestInfoStruct.requestId == SIGNUP_REQUEST)
 	{
 		return true;
 	}
@@ -27,11 +23,11 @@ RequestResult LoginRequestHandler::handleRequest(RequestInfo requestInfoStruct)
 
 	if (requestInfoStruct.requestId == LOGIN_REQUEST)
 	{
-		this->login(requestInfoStruct);
+		requestResultStruct = this->login(requestInfoStruct);
 	}
 	else if (requestInfoStruct.requestId == SIGNUP_REQUEST)
 	{
-		this->signup(requestInfoStruct);
+		requestResultStruct = this->signup(requestInfoStruct);
 	}	
 
 	return requestResultStruct;
@@ -55,7 +51,7 @@ RequestResult LoginRequestHandler::login(RequestInfo info)
 	else
 	{
 		ErrorResponse errorResponse;
-		errorResponse.message = "ERROR";
+		errorResponse.message = "Username or Password isn't true : (";
 
 		// fill RequestResult struct buffer with the server message
 		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(errorResponse);

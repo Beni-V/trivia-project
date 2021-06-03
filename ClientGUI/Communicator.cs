@@ -8,9 +8,17 @@ using Newtonsoft.Json;
 
 namespace ClientGUI
 {
+    static class Constants
+    {
+        public const string LOGIN_CODE = "101";
+        public const string SIGNUP_CODE = "102";
+        public const string ERROR_CODE = "103";
+    }
+
     public class Communicator
     {
         public NetworkStream clientStream { get; set; }
+        public string username { get; set; }
 
         public Communicator()
         {
@@ -48,7 +56,9 @@ namespace ClientGUI
             bytesRead = clientStream.Read(buffer, 0, buffer.Length);
             msg = Encoding.Default.GetString(buffer);
 
-            return JsonConvert.DeserializeObject<Dictionary<string, string>>(BinaryToString(msg));
+            Dictionary<string, string> answerMsg = JsonConvert.DeserializeObject<Dictionary<string, string>>(BinaryToString(msg));
+            answerMsg.Add("code", Convert.ToString(codeMsg));
+            return answerMsg;
         }
 
         public static string StringToBinary(string data)

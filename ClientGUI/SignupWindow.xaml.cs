@@ -39,10 +39,18 @@ namespace ClientGUI
             };
 
             communicator.SerializeAndSendMsg(JsonConvert.SerializeObject(signUpRequest), 202);
-            communicator.RecvAndDeserializeMsg();
+            Dictionary<string, string> answerMsg = communicator.RecvAndDeserializeMsg();
 
-            new MenuWindow(this.communicator).Show();
-            this.Close();
+            if (answerMsg["code"] == Constants.ERROR_CODE)
+            {
+                Error.Text = answerMsg["message"];
+            }
+            else
+            {
+                this.communicator.username = signUpRequest.username;
+                new MenuWindow(this.communicator).Show();
+                this.Close();
+            }
         }
 
         private void Return_Click(object sender, RoutedEventArgs e)

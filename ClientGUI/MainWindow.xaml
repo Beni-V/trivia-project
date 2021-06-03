@@ -41,5 +41,13 @@
         <Button x:Name="Quit" Click="Quit_Click" Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center" Margin="10" FontSize="25" Width="80">
             <Bold>Quit</Bold>
         </Button>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="17*"/>
+                <ColumnDefinition Width="22*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock x:Name="Error" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Foreground="Red"/>
+        </Grid>
     </Grid>
 </Window>
