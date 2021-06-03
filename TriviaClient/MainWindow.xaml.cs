@@ -339,7 +339,7 @@ namespace TriviaClient
         }
         private void roomListJoinRoomButtonClick(object sender, RoutedEventArgs e)
         {
-            signInErrorBox.Text = "";
+            roomsListErrorBox.Text = "";
 
             JoinRoomRequest joinRoomRequest = new JoinRoomRequest
             {
@@ -391,11 +391,18 @@ namespace TriviaClient
         }
         private void mainMenuLogOutButtonClick(object sender, RoutedEventArgs e)
         {
-           
+            serializeAndSendMessage(LOGOUT_REQUEST, "");
+            Dictionary<string, object> response = receiveAndDeserializeMessage();
+
+            if (response.ContainsKey("status") && (string)response["status"] == "1")
+            {
+                mainMenuBorder.Visibility = Visibility.Hidden;
+                wellcomeBorder.Visibility = Visibility.Visible;
+            }
         }
         private void mainMenuExitButtonClick(object sender, RoutedEventArgs e)
         {
-           
+            System.Windows.Application.Current.Shutdown();
         }
         private void statusExitButtonClick(object sender, RoutedEventArgs e)
         {
