@@ -47,6 +47,10 @@ namespace TriviaClient
     {
         public int roomId { get; set; }
     }
+    public class JoinRoomRequest
+    {
+        public int roomId { get; set; }
+    }
     public partial class MainWindow : Window
     {
         public const int LOGIN_REQUEST = 201;
@@ -67,7 +71,10 @@ namespace TriviaClient
         public const int SUCCSESS_RESPONSE_CODE = 1;
         public const int MINIMAL_BUFFER_SIZE = 40;
         public const int MESSAGE_CODE_LENGTH = 8; 
-        public const int MESSAGE_LENGTH_LENGTH = 32; 
+        public const int MESSAGE_LENGTH_LENGTH = 32;
+
+        public Thread updateParticipantsForAdminThread;
+        public Thread updateParticipantsForMemberThread;
 
         public static NetworkStream clientStream;
 
@@ -251,11 +258,81 @@ namespace TriviaClient
         }
         private void mainMenuJoinRoomButtonClick(object sender, RoutedEventArgs e)
         {
-           
+            mainMenuBorder.Visibility = Visibility.Hidden;
+            roomsListBorder.Visibility = Visibility.Visible;
+
+            refreshRoomList();
+
+        }
+
+        public void refreshRoomList()
+        {
+            serializeAndSendMessage(GET_ROOMS_REQUEST, "");
+            Dictionary<string, object> response = receiveAndDeserializeMessage();
+
+            if (response.ContainsKey("status") && (string)response["status"] == "1")
+            {
+                roomsList.Items.Clear();
+                Dictionary<int, string> rooms = new Dictionary<int, string>();
+
+                JArray Jrooms = (JArray)response["rooms"];
+
+
+                foreach (JArray room in Jrooms)
+                {
+                    rooms.Add((int)room[0], (string)room[1]);
+                }
+
+                foreach (KeyValuePair<int, string> roomInDict in rooms)
+                {
+                    roomsList.Items.Add(new Label().Content = $"{roomInDict.Key}: {roomInDict.Value}");
+                }
+
+            }
+            else if (response.ContainsKey("message"))
+            {
+                roomsListErrorBox.Text = (string)response["message"];
+            }
+        }
+        private void refreshRoomsListButtonClick(object sender, RoutedEventArgs e)
+        {
+            refreshRoomList();
+        }
+        private void roomListBackButtonClick(object sender, RoutedEventArgs e)
+        {
+            roomsListBorder.Visibility = Visibility.Hidden;
+            mainMenuBorder.Visibility = Visibility.Visible;
         }
         private void mainMenuShowStatusButtonClick(object sender, RoutedEventArgs e)
         {
            
+        }
+        private void roomListJoinRoomButtonClick(object sender, RoutedEventArgs e)
+        {
+            signInErrorBox.Text = "";
+
+            JoinRoomRequest joinRoomRequest = new JoinRoomRequest
+            {
+                roomId = Convert.ToInt32(roomsList.SelectedItem.ToString()[0].ToString())
+            };
+
+            string jsonDump = JsonConvert.SerializeObject(joinRoomRequest, Formatting.Indented);
+
+            serializeAndSendMessage(JOIN_ROOM_REQUEST, jsonDump);
+            Dictionary<string, object> response = receiveAndDeserializeMessage();
+
+            if (response.ContainsKey("status") && (string)response["status"] == "1")
+            {
+                roomMemberPanelErrorBox.Text = "";
+                roomsListBorder.Visibility = Visibility.Hidden;
+                roomMemberBorder.Visibility = Visibility.Visible;
+                updateParticipantsForMemberThread = new Thread(updateParticipantsForMember);
+                updateParticipantsForMemberThread.Start();
+            }
+            else if (response.ContainsKey("message"))
+            {
+                roomsListErrorBox.Text = (string)response["message"];
+            }
         }
         private void mainMenuShowScoresButtonClick(object sender, RoutedEventArgs e)
         {
@@ -305,15 +382,16 @@ namespace TriviaClient
 
                 if (response.ContainsKey("status") && (string)response["status"] == "1")
                 {
+                    roomAdminPanelErrorBox.Text = "";
                     createRoomBorder.Visibility = Visibility.Hidden;
                     createRoomAdminBorder.Visibility = Visibility.Visible;
                     adminPanelRoomNameBox.Text = $"Room name: {creatingRoomNameBox.Text}";
                     adminPanelPlayersAmountBox.Text = $"Max amount of players: {creatingRoomPlayersAmountBox.Text}";
                     adminPanelQuestionsAmountBox.Text = $"Time per question: {creatingRoomQuestionTimeBox.Text}";
 
-                    string text = creatingRoomNameBox.Text;
-                    Thread updateParticipantsThread = new Thread(() => updateParticipants(text));
-                    updateParticipantsThread.Start();
+                    updateParticipantsForAdminThread = new Thread(updateParticipantsForAdmin);
+                    updateParticipantsForAdminThread.Start();
+                    
                 }
                 else if (response.ContainsKey("message"))
                 {
@@ -321,14 +399,14 @@ namespace TriviaClient
                 }
             }
         }
-        public void updateParticipants(string roomName)
+        public void updateParticipantsForAdmin()
         {
             while (true)
             { 
 
                 serializeAndSendMessage(GET_ROOM_STATE_REQUEST, "");
                 Dictionary<string, object> response = receiveAndDeserializeMessage();
-                if (response.ContainsKey("players"))
+                if (response.ContainsKey("status") && (string)response["status"] == "1")
                 {
                     JArray Jplayers = (JArray)response["players"];
                     string[] players = Jplayers.Select(jv => (string)jv).ToArray();
@@ -356,6 +434,48 @@ namespace TriviaClient
 
                 Thread.Sleep(1000);
             }
+        }public void updateParticipantsForMember()
+        {
+            while (true)
+            { 
+
+                serializeAndSendMessage(GET_ROOM_STATE_REQUEST, "");
+                Dictionary<string, object> response = receiveAndDeserializeMessage();
+                if (response.ContainsKey("status") && (string)response["status"] == "1")
+                {
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        memberPanelQuestionsAmountBox.Text = $"Amount of questions: {(string)response["questionCount"]}";
+                        memberPanelQuestionsTimeOutBox.Text = $"Questions timeout {(string)response["answerTimeout"]}";
+                    }));
+
+                    JArray Jplayers = (JArray)response["players"];
+                    string[] players = Jplayers.Select(jv => (string)jv).ToArray();
+
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        roomMemberParticipants.Items.Clear();
+                    }));
+
+                    for (int i = 0; i < players.Length; i++)
+                    {
+                        this.Dispatcher.Invoke((Action)(() =>
+                        {
+                            roomMemberParticipants.Items.Add(new Label().Content = players[i]);
+                        }));
+                    }
+
+                }
+                else if (response.ContainsKey("message"))
+                {
+                    this.Dispatcher.Invoke((Action)(() =>
+                    {
+                        roomMemberPanelErrorBox.Text = (string)response["message"];
+                    }));
+                }
+
+                Thread.Sleep(1000);
+            }
         }
 
         private void createRoomBackButtonClick(object sender, RoutedEventArgs e)
@@ -366,6 +486,21 @@ namespace TriviaClient
         private void createRoomButtonClick(object sender, RoutedEventArgs e)
         {
 
+        }
+        private void memberPanelExitRoomButtonClick(object sender, RoutedEventArgs e)
+        {
+            serializeAndSendMessage(LEAVE_ROOM_REQUEST, "");
+            Dictionary<string, object> response = receiveAndDeserializeMessage();
+
+            if (response.ContainsKey("status") && (string)response["status"] == "1")
+            {
+                roomMemberBorder.Visibility = Visibility.Hidden;
+                roomsListBorder.Visibility = Visibility.Visible;
+            }
+            else if (response.ContainsKey("message"))
+            {
+                roomMemberPanelErrorBox.Text = (string)response["message"];
+            }
         }
         private void adminPanelCloseRoomButtonClick(object sender, RoutedEventArgs e)
         {

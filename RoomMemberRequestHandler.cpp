@@ -4,9 +4,9 @@ RequestResult RoomMemberRequestHandler::leaveRoom(RequestInfo requestInfoStruct)
 {
 	RequestResult requestResultStruct;
 
-	this->m_room.removeUser(this->m_user); // remove user from room
+	this->m_roomManager.removeUserFromRoom(this->m_room.getId(), this->m_user);
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(LeaveRoomResponse{SUCCSESS_RESPONSE}); // fill buffer with serialized response
-	requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_user); // fill newHandler with next handler
+	requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_roomManager, this->m_user); // fill newHandler with next handler
 
 	return requestResultStruct;
 }
@@ -21,7 +21,7 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo requestInfoStru
 	return requestResultStruct;
 }
 
-RoomMemberRequestHandler::RoomMemberRequestHandler(Room room, LoggedUser user, RoomManager roomManager, RequestHandlerFactory handlerFactory) : m_room(room), m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
+RoomMemberRequestHandler::RoomMemberRequestHandler(Room& room, LoggedUser user, RoomManager& roomManager, RequestHandlerFactory handlerFactory) : m_room(room), m_user(user), m_roomManager(roomManager), m_handlerFactory(handlerFactory)
 {
 }
 

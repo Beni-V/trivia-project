@@ -72,7 +72,7 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 
 	std::vector<RoomData> roomsData;
 
-	std::map<unsigned int, Room> rooms = this->m_roomManager.getRooms();
+	std::map<unsigned int, Room> rooms = this->m_handlerFactory.getRoomManager().getRooms();
 
 	for (std::pair<unsigned int, Room> room : rooms)
 	{
@@ -88,7 +88,7 @@ RequestResult MenuRequestHandler::getPlayersInRoom(RequestInfo info)
 {
 	RequestResult requestResultStruct;
 
-	GetPlayersInRoomResponse response = {this->m_roomManager.getRooms()[JsonRequestPacketDeserializer::deserializeGetPlayersInRoomRequest(info.buffer).roomId].getAllUsers()}; // create response with users in room
+	GetPlayersInRoomResponse response = {this->m_handlerFactory.getRoomManager().getRooms()[JsonRequestPacketDeserializer::deserializeGetPlayersInRoomRequest(info.buffer).roomId].getAllUsers()}; // create response with users in room
 	requestResultStruct.newHandler = this; // fill newHandler with next handler
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(response); // fill buffer with serialized response
 
@@ -122,10 +122,10 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 	RequestResult requestResultStruct;
 
 	JoinRoomRequest request = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer); // deserialize request
-	this->m_roomManager.getRooms()[request.roomId].addUser(this->m_user); // add user to room
+	this->m_roomManager.addUserToRoom(request.roomId, this->m_user);
 
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse{ SUCCSESS_RESPONSE }); // fill buffer with serialized response
-	requestResultStruct.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(this->m_roomManager.getRooms()[request.roomId], this->m_user); // fill newHandler with next handler
+	requestResultStruct.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(this->m_handlerFactory.getRoomManager().getRooms()[request.roomId], this->m_user, this->m_roomManager); // fill newHandler with next handler
 
 	return requestResultStruct;
 }
@@ -135,11 +135,11 @@ RequestResult MenuRequestHandler::createRoom(RequestInfo info)
 	RequestResult requestResultStruct;
 
 	CreateRoomRequest request = JsonRequestPacketDeserializer::deserializeCreateRoomRequest(info.buffer); // deserialize request
-	this->m_roomManager.createRoom(this->m_user, RoomData{(unsigned int)(this->m_roomManager.getRooms().size() + 1), request.roomName, request.maxUsers, request.questionCount, request.answerTimeout, false}); // create room
+	this->m_handlerFactory.getRoomManager().createRoom(this->m_user, RoomData{(unsigned int)(this->m_roomManager.getRooms().size() + 1), request.roomName, request.maxUsers, request.questionCount, request.answerTimeout, false}); // create room
 
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(CreateRoomResponse{ SUCCSESS_RESPONSE });// fill buffer with serialized response
 
-	requestResultStruct.newHandler = this->m_handlerFactory.createRoomAdminRequestHandler(this->m_roomManager, this->m_roomManager.getRooms()[(unsigned int)(this->m_roomManager.getRooms().size())], this->m_user); // fill newHandler with next handler
+	requestResultStruct.newHandler = this->m_handlerFactory.createRoomAdminRequestHandler(this->m_handlerFactory.getRoomManager().getRooms()[(unsigned int)(this->m_roomManager.getRooms().size())], this->m_user); // fill newHandler with next handler
 
 	return requestResultStruct;
 }

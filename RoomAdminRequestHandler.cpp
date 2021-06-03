@@ -7,7 +7,7 @@ RequestResult RoomAdminRequestHandler::closeRoom(RequestInfo requestInfoStrust)
 	this->m_roomManager.deleteRoom(this->m_room.getId());
 
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(CloseRoomResponse{SUCCSESS_RESPONSE}); // fill buffer with serialized response
-	requestResultStruct.newHandler = this; // fill newHandler with next handler
+	requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_roomManager, this->m_user); // fill newHandler with next handler
 
 	return requestResultStruct;
 }
@@ -26,7 +26,7 @@ RequestResult RoomAdminRequestHandler::getRoomState(RequestInfo requestInfoStrus
 {
 	RequestResult requestResultStruct;
 
-	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomStateResponse{ SUCCSESS_RESPONSE, this->m_room.getIsActive(), this->m_room.getAllUsers(), this->m_room.getQuestionsAmount(), this->m_room.getQuestionTimeOut()}); // fill buffer with serialized response
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomStateResponse{ SUCCSESS_RESPONSE, this->m_room.getIsActive(), this->m_roomManager.getRooms()[this->m_room.getId()].getAllUsers(), this->m_room.getQuestionsAmount(), this->m_room.getQuestionTimeOut()}); // fill buffer with serialized response
 	requestResultStruct.newHandler = this; // fill newHandler with next handler
 
 	return requestResultStruct;

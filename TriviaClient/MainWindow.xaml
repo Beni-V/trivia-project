@@ -8,7 +8,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         Title="Menu" Height="675" Width="1200">
     <Grid Background="#ffdadada">
-        <Border x:Name="wellcomeBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Hidden">
+        <Border x:Name="wellcomeBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Visible">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0">
                 </DropShadowEffect>
@@ -99,7 +99,7 @@
                 <TextBlock Text="Room admin panel" FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
                 <TextBlock x:Name="roomAdminPanelErrorBox" Text="" FontSize="15" Margin="0 0 0 1" Foreground="Red"/>
                 <TextBlock x:Name="adminPanelRoomNameBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
-                <TextBlock x:Name="adminPanelPlayersAmountBox" Text="Max amount of players: 5" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
+                <TextBlock x:Name="adminPanelPlayersAmountBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
                 <TextBlock x:Name="adminPanelQuestionsAmountBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
                 <TextBlock x:Name="adminPanelQuestionsTimeOutBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
                 <TextBlock Text="Current participants are:" FontSize="17" FontWeight="Bold" Margin="0 0 0 20" HorizontalAlignment="Center"/>
@@ -110,22 +110,41 @@
                 </Grid>
             </StackPanel>
         </Border>
-        <Border x:Name="roomsListBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Visible">
+        <Border x:Name="roomsListBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Hidden">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0">
                 </DropShadowEffect>
             </Border.Effect>
             <StackPanel>
                 <TextBlock Text="Rooms list" FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
+                <TextBlock x:Name="roomsListErrorBox" Text="" FontSize="15" Margin="0 0 0 1" Foreground="Red"/>
                 <TextBlock Text="Available rooms:" FontSize="17" FontWeight="Bold" Margin="0 0 0 20" HorizontalAlignment="Center"/>
                 <ListBox x:Name="roomsList" FontSize="15" Margin="0 0 0 2" HorizontalAlignment="Center" Background="#ffdadada" MinWidth="300" MinHeight="100"/>
-                <Button HorizontalAlignment="Center" Content="Refresh" Click="refreshRoomsList" Margin="5" MinWidth="300"/>
+                <Button HorizontalAlignment="Center" Content="Refresh" Click="refreshRoomsListButtonClick" Margin="5" MinWidth="300"/>
                 <Grid Margin="0 20 0 20">
                     <Button HorizontalAlignment="Left" Content="Join Room" Click="roomListJoinRoomButtonClick"/>
                     <Button HorizontalAlignment="Right" Content="Back" Style="{StaticResource MaterialDesignFlatButton}" Click="roomListBackButtonClick"/>
                 </Grid>
             </StackPanel>
         </Border>
-        
+        <Border x:Name="roomMemberBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Hidden">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0">
+                </DropShadowEffect>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock Text="Room member panel" FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
+                <TextBlock x:Name="roomMemberPanelErrorBox" Text="" FontSize="15" Margin="0 0 0 1" Foreground="Red"/>
+                <TextBlock x:Name="memberPanelRoomNameBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
+                <TextBlock x:Name="memberPanelPlayersAmountBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
+                <TextBlock x:Name="memberPanelQuestionsAmountBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
+                <TextBlock x:Name="memberPanelQuestionsTimeOutBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
+                <TextBlock Text="Current participants are:" FontSize="17" FontWeight="Bold" Margin="0 0 0 20" HorizontalAlignment="Center"/>
+                <ListBox x:Name="roomMemberParticipants" FontSize="15" Margin="0 0 0 2" HorizontalAlignment="Center" Background="#ffdadada" MinWidth="300" MinHeight="100"/>
+                <Grid Margin="0 20 0 20">
+                    <Button HorizontalAlignment="Center" Content="Exit room" Style="{StaticResource MaterialDesignFlatButton}" Click="memberPanelExitRoomButtonClick"/>
+                </Grid>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

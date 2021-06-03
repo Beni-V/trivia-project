@@ -24,6 +24,7 @@ void Room::removeUser(LoggedUser user)
         if (*it == user)
         {
             this->_participates.erase(it);
+            break;
         }
     }
 }

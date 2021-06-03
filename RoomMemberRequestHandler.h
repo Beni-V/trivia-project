@@ -19,7 +19,7 @@ private:
 	RequestResult getRoomState(RequestInfo requestInfoStruct);
 
 public:
-	RoomMemberRequestHandler(Room room, LoggedUser user, RoomManager roomManager, RequestHandlerFactory handlerFactory);
+	RoomMemberRequestHandler(Room& room, LoggedUser user, RoomManager& roomManager, RequestHandlerFactory handlerFactory);
 	bool isRequestRelevant(RequestInfo requestInfoStruct);
 	RequestResult handleRequest(RequestInfo requestInfoStruct);
 
