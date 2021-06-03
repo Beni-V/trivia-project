@@ -143,5 +143,22 @@
                 </Grid>
             </StackPanel>
         </Border>
+        <Border x:Name="statusBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Hidden">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0">
+                </DropShadowEffect>
+            </Border.Effect>
+            <StackPanel>
+                <TextBlock Text="My performances:" FontSize="30" FontWeight="Bold" Margin="0 0 0 20"/>
+                <TextBlock x:Name="statusErrorBox" Text="" FontSize="15" Margin="0 0 0 1" Foreground="Red"/>
+                <TextBlock x:Name="statusGamesAmountBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
+                <TextBlock x:Name="statusRightAnswersAmountBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
+                <TextBlock x:Name="statusWrongAnswersAmountBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
+                <TextBlock x:Name="statusAverageAnswerTimeBox" Text="" FontSize="15" Margin="0 0 0 2" Foreground="Purple"/>
+                <Grid Margin="0 20 0 20">
+                    <Button HorizontalAlignment="Center" Content="Back to menu" Style="{StaticResource MaterialDesignFlatButton}" Click="statusExitButtonClick"/>
+                </Grid>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

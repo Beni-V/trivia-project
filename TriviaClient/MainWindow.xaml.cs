@@ -317,7 +317,12 @@ namespace TriviaClient
         }
         private void mainMenuShowStatusButtonClick(object sender, RoutedEventArgs e)
         {
-           
+            mainMenuBorder.Visibility = Visibility.Hidden;
+            statusBorder.Visibility = Visibility.Visible;
+            statusGamesAmountBox.Text = $"Number of played games: 0";
+            statusRightAnswersAmountBox.Text = $"Amount of right answers: 0";
+            statusWrongAnswersAmountBox.Text = $"Amount of total answers: 0";
+            statusAverageAnswerTimeBox.Text = $"Average time for answer: 0";
         }
         private void roomListJoinRoomButtonClick(object sender, RoutedEventArgs e)
         {
@@ -357,6 +362,11 @@ namespace TriviaClient
         private void mainMenuExitButtonClick(object sender, RoutedEventArgs e)
         {
            
+        }
+        private void statusExitButtonClick(object sender, RoutedEventArgs e)
+        {
+            statusBorder.Visibility = Visibility.Hidden;
+            mainMenuBorder.Visibility = Visibility.Visible;
         }
         private void creatingRoomCreateRoomButtonClick(object sender, RoutedEventArgs e)
         {
