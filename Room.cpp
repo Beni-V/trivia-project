@@ -49,6 +49,11 @@ int Room::getMaxPlayers()
     return this->m_metadata.maxPlayers;
 }
 
+void Room::setIsActive(bool isActive)
+{
+    this->m_metadata.isActive = isActive;
+}
+
 unsigned int Room::getQuestionsAmount()
 {
     return this->m_metadata.numOfQuestionsInGame;

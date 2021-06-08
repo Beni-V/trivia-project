@@ -19,7 +19,7 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo requestInfoStru
 
 	if (rooms.find((unsigned int)this->m_room.getId()) != rooms.end())
 	{
-		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomStateResponse{ SUCCSESS_RESPONSE, this->m_room.getIsActive(), this->m_roomManager.getRooms()[this->m_room.getId()].getAllUsers(), this->m_room.getQuestionsAmount(), this->m_room.getQuestionTimeOut() }); // fill buffer with serialized response
+		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomStateResponse{ SUCCSESS_RESPONSE, this->m_roomManager.getRooms()[this->m_room.getId()].getIsActive(), this->m_roomManager.getRooms()[this->m_room.getId()].getAllUsers(), this->m_room.getQuestionsAmount(), this->m_room.getQuestionTimeOut() }); // fill buffer with serialized response
 		requestResultStruct.newHandler = this; // fill newHandler with next handler
 	}
 	else

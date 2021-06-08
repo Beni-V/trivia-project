@@ -175,5 +175,33 @@
                 </Grid>
             </StackPanel>
         </Border>
+        <Border>
+            <materialDesign:DialogHost x:Name="roomClosedDialog" BorderBrush="{DynamicResource MaterialDesignDivider}">
+                <materialDesign:DialogHost.DialogContent>
+                    <Grid Width="300" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Margin="15">
+                            <TextBlock Text="Room were closed by creator." Width="200" Margin="15 5" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="15">
+                            <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" HorizontalAlignment="Right" Content="Ok" Style="{StaticResource MaterialDesignFlatButton}"/>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:DialogHost.DialogContent>
+            </materialDesign:DialogHost>
+        </Border>
+        <Border>
+            <materialDesign:DialogHost x:Name="roomStartedDialog" BorderBrush="{DynamicResource MaterialDesignDivider}">
+                <materialDesign:DialogHost.DialogContent>
+                    <Grid Width="300" Height="150" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Margin="15">
+                            <TextBlock Text="Room were started." Width="200" Margin="15 5" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="15">
+                            <Button Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" HorizontalAlignment="Right" Content="Ok" Style="{StaticResource MaterialDesignFlatButton}"/>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:DialogHost.DialogContent>
+            </materialDesign:DialogHost>
+        </Border>
     </Grid>
 </Window>

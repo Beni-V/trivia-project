@@ -12,6 +12,7 @@ public:
 	bool getRoomState(int ID);
 	void addUserToRoom(int id, LoggedUser user);
 	void removeUserFromRoom(int id, LoggedUser user);
+	void startRoom(int id);
 	std::map<unsigned int, Room> getRooms();
 	
 private:

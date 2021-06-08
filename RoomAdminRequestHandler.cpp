@@ -16,6 +16,8 @@ RequestResult RoomAdminRequestHandler::startGame(RequestInfo requestInfoStrust)
 {
 	RequestResult requestResultStruct;
 
+	this->m_roomManager.startRoom(this->m_room.getId());
+
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(StartGameResponse{ SUCCSESS_RESPONSE }); // fill buffer with serialized response
 	requestResultStruct.newHandler = this; // fill newHandler with next handler
 

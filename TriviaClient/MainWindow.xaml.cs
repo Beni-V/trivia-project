@@ -640,6 +640,14 @@ namespace TriviaClient
                                 roomMemberParticipants.Items.Add(new Label().Content = players[i]);
                             }));
                         }
+
+                        if ((bool)response["hasGameBegun"])
+                        {
+                            this.Dispatcher.Invoke((Action)(() =>
+                            {
+                                roomStartedDialog.IsOpen = true;
+                            }));
+                        }
                     }
                     else if (response.ContainsKey("message")) // if there is an error message in the response
                     {
@@ -650,7 +658,13 @@ namespace TriviaClient
                             {
                                 roomsListErrorBox.Text = "";
                             }));
-                            
+
+
+                            this.Dispatcher.Invoke((Action)(() =>
+                            {
+                                roomClosedDialog.IsOpen = true;
+                            }));
+
                             // switch borders to rooms list
                             this.Dispatcher.Invoke((Action)(() =>
                             {
@@ -682,7 +696,17 @@ namespace TriviaClient
         }
         private void createRoomButtonClick(object sender, RoutedEventArgs e)
         {
-            // will be implemented in next version
+            serializeAndSendMessage(START_GAME_REQUEST, ""); // send request to start game
+            Dictionary<string, object> response = receiveAndDeserializeMessage(); // receive response
+
+            if (response.ContainsKey("status") && (string)response["status"] == "1") // if response have success status
+            {
+                roomStartedDialog.IsOpen = true;
+            }
+            else if (response.ContainsKey("message")) // display the error message if there is an error message in the response
+            {
+                roomAdminPanelErrorBox.Text = (string)response["message"];
+            }
         }
         private void scoresExitButtonClick(object sender, RoutedEventArgs e)
         {

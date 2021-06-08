@@ -292,7 +292,7 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetRo
 
 	//create a message in format JSON
 	jsonObject["status"] = std::to_string(GRR.status);
-	jsonObject["hasGameBegun"] = GRR.hasGameBegun ? "true" : "false";
+	jsonObject["hasGameBegun"] = GRR.hasGameBegun;
 	jsonObject["players"] = GRR.players;
 	jsonObject["questionCount"] = std::to_string(GRR.questionCount);
 	jsonObject["answerTimeout"] = std::to_string(GRR.answerTimeout);
