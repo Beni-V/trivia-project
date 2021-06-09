@@ -11,6 +11,7 @@
 #define LEAVE_ROOM_RESPONSE_CODE 107
 #define GET_STATISTICS_RESPONSE_CODE 108
 #define GET_HIGH_SCORES_RESPONSE_CODE 109
+#define GET_GAME_RESULT_RESPONSE 110
 
 using json = nlohmann::json;
 
@@ -321,6 +322,34 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Leave
 
 	//append the message code and the message size to the response message
 	responseMessage.append(std::bitset<BYTE>(LEAVE_ROOM_RESPONSE_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetGameResultResponse GGRR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	// convert results from response to format allowed by json
+	std::map<std::string, std::vector<unsigned int>> results;
+	for (PlayerResult pResult : GGRR.results)
+	{
+		results.insert({ pResult.username, { pResult.correctAnswerCount, pResult.wrongAnswerCount, pResult.averageAnswerTime } });
+	}
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(GGRR.status);
+	jsonObject["results"] = results;
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(GET_GAME_RESULT_RESPONSE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
 
 	//append the message to the response message
 	for (int i = 0; i < message.size(); i++)
