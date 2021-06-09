@@ -39,6 +39,11 @@ struct CreateRoomRequest
 	unsigned int answerTimeout;
 };
 
+struct SubmitAnswerRequest
+{
+	unsigned int answerId;
+};
+
 class JsonRequestPacketDeserializer
 {
 public:
