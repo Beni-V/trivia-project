@@ -18,7 +18,7 @@ private:
 	std::map<LoggedUser, GameData> m_players;
 
 public:
-	Question getQuestionForUser();
+	Question getQuestionForUser(LoggedUser user);
 	void submitAnswer(LoggedUser user, std::string answer);
 	void removePlayer(LoggedUser user);
 };
