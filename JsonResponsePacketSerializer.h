@@ -134,4 +134,5 @@ public:
 	static std::vector<unsigned char> serializeResponse(GetGameResultResponse GGRR);
 	static std::vector<unsigned char> serializeResponse(SubmitAnswerResponse SAR);
 	static std::vector<unsigned char> serializeResponse(GetQuestionResponse GQR);
+	static std::vector<unsigned char> serializeResponse(LeaveGameResponse LGR);
 };

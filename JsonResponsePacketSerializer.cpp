@@ -14,6 +14,7 @@
 #define GET_GAME_RESULT_RESPONSE 110
 #define SUBMIT_ANSWER_RESPONSE 111
 #define GET_QUESTION_RESPONSE 112
+#define LEAVE_GAME_RESPONSE 113
 
 using json = nlohmann::json;
 
@@ -395,6 +396,26 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetQu
 
 	//append the message code and the message size to the response message
 	responseMessage.append(std::bitset<BYTE>(GET_QUESTION_RESPONSE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(LeaveGameResponse LGR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(LGR.status);
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(LEAVE_GAME_RESPONSE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
 
 	//append the message to the response message
 	for (int i = 0; i < message.size(); i++)
