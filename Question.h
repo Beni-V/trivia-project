@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 
+#define CORRECT_ANSWER_INDEX 0 
+
 class Question
 {
 private:
@@ -9,7 +11,7 @@ private:
 	std::vector<std::string> m_possibleAnswers;
 
 public:
-	std::string getQuestions();
+	std::string getQuestion();
 	std::vector<std::string> getPossibleAnswers();
 	std::string getCorrectAnswer();
 };

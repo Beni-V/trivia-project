@@ -9,3 +9,8 @@ std::vector<std::string> Question::getPossibleAnswers()
 {
 	return this->m_possibleAnswers;
 }
+
+std::string Question::getCorrectAnswer()
+{
+	return this->m_possibleAnswers[CORRECT_ANSWER_INDEX];
+}
