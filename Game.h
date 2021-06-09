@@ -10,3 +10,15 @@ struct GameData
 	unsigned int wrongAnswerCount;
 	unsigned int averageAnswerTime;
 };
+
+class Game
+{
+private:
+	std::vector<Question> m_questions;
+	std::map<LoggedUser, GameData> m_players;
+
+public:
+	Question getQuestionForUser();
+	void submitAnswer(LoggedUser user, std::string answer);
+	void removePlayer(LoggedUser user);
+};
