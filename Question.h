@@ -11,6 +11,7 @@ private:
 	std::vector<std::string> m_possibleAnswers;
 
 public:
+	Question(std::string question, std::vector<std::string> possibleAnswers);
 	std::string getQuestion();
 	std::vector<std::string> getPossibleAnswers();
 	std::string getCorrectAnswer();

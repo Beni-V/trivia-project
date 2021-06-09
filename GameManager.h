@@ -12,6 +12,6 @@ private:
 
 public:
 	GameManager();
-	Game craeteGame(Room room);
+	Game createGame(Room room);
 	void deleteGame(Game gameToDelete);
 };

@@ -1,5 +1,9 @@
 #include "Question.h"
 
+Question::Question(std::string question, std::vector<std::string> possibleAnswers) : m_question(question), m_possibleAnswers(possibleAnswers)
+{
+}
+
 std::string Question::getQuestion()
 {
 	return this->m_question;
