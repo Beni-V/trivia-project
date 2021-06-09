@@ -16,3 +16,8 @@ void Game::submitAnswer(LoggedUser user, std::string answer)
 		this->m_players[user].wrongAnswerCount++;
 	}
 }
+
+void Game::removePlayer(LoggedUser user)
+{
+	this->m_players.erase(user);
+}
