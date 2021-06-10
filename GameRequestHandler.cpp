@@ -24,6 +24,16 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo requestInfoStruct)
 	return requestResultStruct;
 }
 
+RequestResult GameRequestHandler::getGameResults(RequestInfo requestInfoStruct)
+{
+	RequestResult requestResultStruct;
+
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetGameResultResponse{ SUCCSESS_RESPONSE}); // fill buffer with serialized response
+	requestResultStruct.newHandler = this; // fill newHandler with next handler
+
+	return requestResultStruct;
+}
+
 bool GameRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
 {
 	if (requestInfoStruct.requestId == GET_QUESTION_REQUEST ||
