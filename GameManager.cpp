@@ -23,3 +23,8 @@ Game GameManager::createGame(Room room)
 
 	return Game(questions, users);
 }
+
+void GameManager::deleteGame(Game gameToDelete)
+{
+	this->m_games.pop_back();
+}
