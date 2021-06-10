@@ -25,6 +25,7 @@ public:
 	bool getIsActive();
 	std::string getName();
 	int getMaxPlayers();
+	void setIsActive(bool isActive);
 	unsigned int getQuestionsAmount();
 	unsigned int getQuestionTimeOut();
 	std::vector<std::string> getAllUsers();

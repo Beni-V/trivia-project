@@ -27,6 +27,11 @@ void RoomManager::removeUserFromRoom(int id, LoggedUser user)
 	this->m_rooms[id].removeUser(user);
 }
 
+void RoomManager::startRoom(int id)
+{
+	this->m_rooms[id].setIsActive(true);
+}
+
 std::map<unsigned int, Room> RoomManager::getRooms()
 {
 	return this->m_rooms;

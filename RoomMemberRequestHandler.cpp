@@ -15,8 +15,18 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo requestInfoStru
 {
 	RequestResult requestResultStruct;
 
-	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomStateResponse{ SUCCSESS_RESPONSE, this->m_room.getIsActive(), this->m_roomManager.getRooms()[this->m_room.getId()].getAllUsers(), this->m_room.getQuestionsAmount(), this->m_room.getQuestionTimeOut() }); // fill buffer with serialized response
-	requestResultStruct.newHandler = this; // fill newHandler with next handler
+	std::map<unsigned int, Room> rooms = this->m_roomManager.getRooms();
+
+	if (rooms.find((unsigned int)this->m_room.getId()) != rooms.end())
+	{
+		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomStateResponse{ SUCCSESS_RESPONSE, this->m_roomManager.getRooms()[this->m_room.getId()].getIsActive(), this->m_roomManager.getRooms()[this->m_room.getId()].getAllUsers(), this->m_room.getQuestionsAmount(), this->m_room.getQuestionTimeOut() }); // fill buffer with serialized response
+		requestResultStruct.newHandler = this; // fill newHandler with next handler
+	}
+	else
+	{
+		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{"Room Closed"}); // fill buffer with serialized response
+		requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_user); // fill newHandler with next handler
+	}
 
 	return requestResultStruct;
 }

@@ -83,7 +83,7 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 	{
 		roomsData.push_back(RoomData{ room.first, room.second.getName(), (unsigned int)room.second.getMaxPlayers(), (unsigned int)room.second.getQuestionsAmount(), (unsigned int)room.second.getQuestionTimeOut(), room.second.getIsActive() });
 	}
-
+	std::cout << std::endl;
 	requestResultStruct.newHandler = this; // fill newHandler with next handler
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomsResponse{ SUCCSESS_RESPONSE, roomsData}); // fill Buffer with serialized get rooms response
 	return requestResultStruct;
@@ -126,11 +126,22 @@ RequestResult MenuRequestHandler::joinRoom(RequestInfo info)
 {
 	RequestResult requestResultStruct;
 
-	JoinRoomRequest request = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer); // deserialize request
-	this->m_roomManager.addUserToRoom(request.roomId, this->m_user);
 
-	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse{ SUCCSESS_RESPONSE }); // fill buffer with serialized response
-	requestResultStruct.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(this->m_handlerFactory.getRoomManager().getRooms()[request.roomId], this->m_user); // fill newHandler with next handler
+
+	JoinRoomRequest request = JsonRequestPacketDeserializer::deserializeJoinRoomRequest(info.buffer); // deserialize request
+
+	if (this->m_handlerFactory.getRoomManager().getRooms()[request.roomId].getAllUsers().size() < this->m_handlerFactory.getRoomManager().getRooms()[request.roomId].getMaxPlayers())
+	{
+		this->m_roomManager.addUserToRoom(request.roomId, this->m_user);
+		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(JoinRoomResponse{ SUCCSESS_RESPONSE }); // fill buffer with serialized response
+		requestResultStruct.newHandler = this->m_handlerFactory.createRoomMemberRequestHandler(this->m_handlerFactory.getRoomManager().getRooms()[request.roomId], this->m_user); // fill newHandler with next handler
+	}
+	else
+	{
+		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(ErrorResponse{"This room is full"}); // fill buffer with serialized response		
+		requestResultStruct.newHandler = this; // fill newHandler with next handler
+	}
+
 
 	return requestResultStruct;
 }
