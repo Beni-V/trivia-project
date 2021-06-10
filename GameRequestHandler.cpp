@@ -59,3 +59,29 @@ bool GameRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
 		return false;
 	}
 }
+
+RequestResult GameRequestHandler::handleRequest(RequestInfo requestInfoStruct)
+{
+	RequestResult requestResultStruct;
+
+	switch (requestInfoStruct.requestId)
+	{
+	case GET_QUESTION_REQUEST:
+		requestResultStruct = this->getQuestion(requestInfoStruct);
+		break;
+
+	case SUBMIT_ANSWER_REQUEST:
+		requestResultStruct = this->submitAnswer(requestInfoStruct);
+		break;
+
+	case GET_GAME_RESULT_REQUEST:
+		requestResultStruct = this->getGameResults(requestInfoStruct);
+		break;
+
+	case LEAVE_GAME_REQUEST:
+		requestResultStruct = this->leaveGame(requestInfoStruct);
+		break;
+	}
+
+	return requestResultStruct;
+}
