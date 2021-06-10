@@ -82,6 +82,38 @@ struct LeaveRoomResponse
 	unsigned int status;
 };
 
+struct LeaveGameResponse
+{
+	unsigned int status;
+};
+
+struct GetQuestionResponse
+{
+	unsigned int status;
+	std::string question;
+	std::map<unsigned int, std::string> answers;
+};
+
+struct SubmitAnswerResponse
+{
+	unsigned int status;
+	unsigned int correctAnswerId;
+};
+
+struct PlayerResult
+{
+	std::string username;
+	unsigned int correctAnswerCount;
+	unsigned int wrongAnswerCount;
+	unsigned int averageAnswerTime;
+};
+
+struct GetGameResultResponse
+{
+	unsigned int status;
+	std::vector<PlayerResult> results;
+};
+
 class JsonResponsePacketSerializer
 {
 public:
@@ -99,4 +131,8 @@ public:
 	static std::vector<unsigned char> serializeResponse(StartGameResponse SGR);
 	static std::vector<unsigned char> serializeResponse(GetRoomStateResponse GRR);
 	static std::vector<unsigned char> serializeResponse(LeaveRoomResponse LRR);
+	static std::vector<unsigned char> serializeResponse(GetGameResultResponse GGRR);
+	static std::vector<unsigned char> serializeResponse(SubmitAnswerResponse SAR);
+	static std::vector<unsigned char> serializeResponse(GetQuestionResponse GQR);
+	static std::vector<unsigned char> serializeResponse(LeaveGameResponse LGR);
 };

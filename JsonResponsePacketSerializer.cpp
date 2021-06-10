@@ -11,6 +11,10 @@
 #define LEAVE_ROOM_RESPONSE_CODE 107
 #define GET_STATISTICS_RESPONSE_CODE 108
 #define GET_HIGH_SCORES_RESPONSE_CODE 109
+#define GET_GAME_RESULT_RESPONSE 110
+#define SUBMIT_ANSWER_RESPONSE 111
+#define GET_QUESTION_RESPONSE 112
+#define LEAVE_GAME_RESPONSE 113
 
 using json = nlohmann::json;
 
@@ -321,6 +325,97 @@ std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(Leave
 
 	//append the message code and the message size to the response message
 	responseMessage.append(std::bitset<BYTE>(LEAVE_ROOM_RESPONSE_CODE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetGameResultResponse GGRR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	// convert results from response to format allowed by json
+	std::map<std::string, std::vector<unsigned int>> results;
+	for (PlayerResult pResult : GGRR.results)
+	{
+		results.insert({ pResult.username, { pResult.correctAnswerCount, pResult.wrongAnswerCount, pResult.averageAnswerTime } });
+	}
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(GGRR.status);
+	jsonObject["results"] = results;
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(GET_GAME_RESULT_RESPONSE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(SubmitAnswerResponse SAR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(SAR.status);
+	jsonObject["correctAnswerId"] = SAR.correctAnswerId;
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(SUBMIT_ANSWER_RESPONSE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(GetQuestionResponse GQR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(GQR.status);
+	jsonObject["question"] = GQR.question;
+	jsonObject["answers"] = GQR.answers;
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(GET_QUESTION_RESPONSE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
+
+	//append the message to the response message
+	for (int i = 0; i < message.size(); i++)
+	{
+		responseMessage.append(std::bitset<BYTE>(message[i]).to_string());
+	}
+	return std::vector<unsigned char>(responseMessage.begin(), responseMessage.end());
+}
+
+std::vector<unsigned char> JsonResponsePacketSerializer::serializeResponse(LeaveGameResponse LGR)
+{
+	json jsonObject;
+	std::string responseMessage;
+
+	//create a message in format JSON
+	jsonObject["status"] = std::to_string(LGR.status);
+	std::string message = jsonObject.dump();
+
+	//append the message code and the message size to the response message
+	responseMessage.append(std::bitset<BYTE>(LEAVE_GAME_RESPONSE).to_string()).append(std::bitset<BYTE* SIZE_PART>(message.size()).to_string());
 
 	//append the message to the response message
 	for (int i = 0; i < message.size(); i++)
