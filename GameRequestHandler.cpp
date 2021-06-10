@@ -34,6 +34,17 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo requestInfoStruct)
 	return requestResultStruct;
 }
 
+RequestResult GameRequestHandler::leaveGame(RequestInfo requestInfoStruct)
+{
+	RequestResult requestResultStruct;
+
+	this->m_game.removePlayer(this->m_user.getUsername());
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(LeaveGameResponse{ SUCCSESS_RESPONSE }); // fill buffer with serialized response
+	requestResultStruct.newHandler = this; // fill newHandler with next handler
+
+	return requestResultStruct;
+}
+
 bool GameRequestHandler::isRequestRelevant(RequestInfo requestInfoStruct)
 {
 	if (requestInfoStruct.requestId == GET_QUESTION_REQUEST ||
