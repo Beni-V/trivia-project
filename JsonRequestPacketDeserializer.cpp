@@ -136,3 +136,28 @@ CreateRoomRequest JsonRequestPacketDeserializer::deserializeCreateRoomRequest(st
 
 	return result;
 }
+
+SubmitAnswerRequest JsonRequestPacketDeserializer::deserializeSubmitAnswerRequest(std::vector<unsigned char> Buffer)
+{
+	std::string serializedJsonMessage(Buffer.begin() + HEADERS_LENGTH, Buffer.end()); // the string will store only the json message part in bits
+	std::stringstream sstream(serializedJsonMessage);
+	std::string deserializedJsonMessage;
+	json deserializedJsonObject;
+	SubmitAnswerRequest result;
+
+	// deserialize the json message into deserializedJsonMessage
+	while (sstream.good())
+	{
+		std::bitset<BYTE> bits;
+		sstream >> bits;
+		char messageChar = char(bits.to_ulong());
+		deserializedJsonMessage += messageChar;
+	}
+
+	deserializedJsonObject = json::parse(deserializedJsonMessage); // parse json string into json object
+
+	// build the struct that will be returned
+	result.answerId = deserializedJsonObject["answerId"];
+
+	return result;
+}

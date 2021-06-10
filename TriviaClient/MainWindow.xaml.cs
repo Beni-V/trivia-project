@@ -78,6 +78,10 @@ namespace TriviaClient
         public const int GET_HIGH_SCORES_REQUEST = 101;
         public const int SIGNUP_RESPONSE = 102;
         public const int ERROR_RESPONSE = 103;
+        public const int GET_GAME_RESULT_REQUEST = 110;
+        public const int SUBMIT_ANSWER_REQUEST = 111;
+        public const int GET_QUESTION_REQUEST = 112;
+        public const int LEAVE_GAME_REQUEST = 113;
         public const int BITS_IN_BYTE = 8;
         public const int SUCCSESS_RESPONSE_CODE = 1;
         public const int MINIMAL_BUFFER_SIZE = 40; // minimal size is the message code + message length size in bits
