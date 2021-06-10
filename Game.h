@@ -5,21 +5,21 @@
 
 struct GameData
 {
-	Question currentQuestion;
-	unsigned int correctAnswerCount;
-	unsigned int wrongAnswerCount;
-	unsigned int averageAnswerTime;
+    Question currentQuestion;
+    unsigned int correctAnswerCount;
+    unsigned int wrongAnswerCount;
+    unsigned int averageAnswerTime;
 };
 
 class Game
 {
 private:
-	std::vector<Question> m_questions;
-	std::map<LoggedUser, GameData> m_players;
+    std::vector<Question> m_questions;
+    std::map<std::string, GameData> m_players;
 
 public:
-	Game(std::vector<Question> questions, std::map<LoggedUser, GameData> players);
-	Question getQuestionForUser(LoggedUser user);
-	void submitAnswer(LoggedUser user, std::string answer);
-	void removePlayer(LoggedUser user);
+    Game(std::vector<Question> questions, std::map<std::string, GameData> players);
+    Question getQuestionForUser(std::string user);
+    void submitAnswer(std::string user, std::string answer);
+    void removePlayer(std::string user);
 };

@@ -1,27 +1,27 @@
 #include "Game.h"
 
-Game::Game(std::vector<Question> questions, std::map<LoggedUser, GameData> players) : m_questions(questions), m_players(players)
+Game::Game(std::vector<Question> questions, std::map<std::string, GameData> players) : m_questions(questions), m_players(players)
 {
 }
 
-Question Game::getQuestionForUser(LoggedUser user)
+Question Game::getQuestionForUser(std::string user)
 {
-	return this->m_players[user].currentQuestion;
+    return this->m_players.at(user).currentQuestion;
 }
 
-void Game::submitAnswer(LoggedUser user, std::string answer)
+void Game::submitAnswer(std::string user, std::string answer)
 {
-	if (answer == this->m_players[user].currentQuestion.getCorrectAnswer())
-	{
-		this->m_players[user].correctAnswerCount++;
-	}
-	else
-	{
-		this->m_players[user].wrongAnswerCount++;
-	}
+    if (answer == this->m_players.at(user).currentQuestion.getCorrectAnswer())
+    {
+        this->m_players.at(user).correctAnswerCount++;
+    }
+    else
+    {
+        this->m_players.at(user).wrongAnswerCount++;
+    }
 }
 
-void Game::removePlayer(LoggedUser user)
+void Game::removePlayer(std::string user)
 {
-	this->m_players.erase(user);
+    this->m_players.erase(user);
 }
