@@ -85,3 +85,7 @@ RequestResult GameRequestHandler::handleRequest(RequestInfo requestInfoStruct)
 
 	return requestResultStruct;
 }
+
+GameRequestHandler::GameRequestHandler(RequestHandlerFactory& handlerFactory, GameManager& gameManager, Game& game, LoggedUser& user) : m_handlerFactory(handlerFactory), m_gameManager(gameManager), m_game(game), m_user(user)
+{
+}

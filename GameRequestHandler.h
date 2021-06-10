@@ -18,6 +18,7 @@ private:
 	RequestResult leaveGame(RequestInfo requestInfoStruct);
 
 public:
+	GameRequestHandler(RequestHandlerFactory& handlerFactory, GameManager& gameManager, Game& game, LoggedUser& user);
 	bool isRequestRelevant(RequestInfo requestInfoStruct);
 	RequestResult handleRequest(RequestInfo requestInfoStruct);
 };
