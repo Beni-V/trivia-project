@@ -4,7 +4,14 @@ RequestResult GameRequestHandler::getQuestion(RequestInfo requestInfoStruct)
 {
 	RequestResult requestResultStruct;
 
-	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetQuestionResponse{ SUCCSESS_RESPONSE, this->m_game.getQuestionForUser(this->m_user.getUsername()).getQuestion()}); // fill buffer with serialized response
+	std::map<unsigned int, std::string> answers;
+
+	for (int i = 0; i < this->m_game.getQuestionForUser(this->m_user.getUsername()).getPossibleAnswers().size(); i++)
+	{
+		answers.insert({ i, this->m_game.getQuestionForUser(this->m_user.getUsername()).getPossibleAnswers()[i] });
+	}
+
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetQuestionResponse{ SUCCSESS_RESPONSE, this->m_game.getQuestionForUser(this->m_user.getUsername()).getQuestion(), answers}); // fill buffer with serialized response
 	requestResultStruct.newHandler = this; // fill newHandler with next handler
 
 	return requestResultStruct;
@@ -19,7 +26,7 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo requestInfoStruct)
 
 	SubmitAnswerRequest request = JsonRequestPacketDeserializer::deserializeSubmitAnswerRequest(requestInfoStruct.buffer);
 
-	this->m_game.submitAnswer(this->m_user.getUsername(), this->m_game.getQuestionForUser(this->m_user.getUsername()).getPossibleAnswers()[request.answerId]);
+	this->m_game.submitAnswer(this->m_user.getUsername(), request.answerId);
 
 	return requestResultStruct;
 }

@@ -9,9 +9,17 @@ Question Game::getQuestionForUser(std::string user)
     return this->m_players.at(user).currentQuestion;
 }
 
-void Game::submitAnswer(std::string user, std::string answer)
+void Game::submitAnswer(std::string user, int answerId)
 {
-    if (answer == this->m_players.at(user).currentQuestion.getCorrectAnswer())
+    for (int i = 0; i < this->m_questions.size(); i++)
+    {
+        if (this->m_questions[i] == this->m_players.at(user).currentQuestion && i != this->m_questions.size())
+        {
+            this->m_players.at(user).currentQuestion = this->m_questions[i + 1];
+            break;
+        }
+    }
+    if (answerId == CORRECT_ANSWER_INDEX)
     {
         this->m_players.at(user).correctAnswerCount++;
     }

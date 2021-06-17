@@ -2,7 +2,7 @@
 #include <string>
 #include <vector>
 
-#define CORRECT_ANSWER_INDEX 0 
+#define CORRECT_ANSWER_INDEX 4
 
 class Question
 {
@@ -15,4 +15,5 @@ public:
 	std::string getQuestion();
 	std::vector<std::string> getPossibleAnswers();
 	std::string getCorrectAnswer();
+	bool operator==(const Question& other);
 };

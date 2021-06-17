@@ -175,12 +175,13 @@
                 </Grid>
             </StackPanel>
         </Border>
-        <Border x:Name="gameBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Visible">
+        <Border x:Name="gameBorder" MinWidth="400" Margin="15" Background="White" VerticalAlignment="Center" Padding="40" MaxWidth="550" CornerRadius="20" Visibility="Hidden">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="30" Color="LightGray" ShadowDepth="0">
                 </DropShadowEffect>
             </Border.Effect>
             <StackPanel>
+                <TextBlock x:Name="gameErrorBox" Text="" FontSize="15" Margin="0 0 0 1" Foreground="Red"/>
                 <TextBlock x:Name="gameQuestionIndex" Text="" FontSize="30" FontWeight="Bold" Margin="0 0 0 20" HorizontalAlignment="Center"/>
                 <TextBlock x:Name="gameCurrentQuestion" Text="" FontSize="17"  Margin="0 0 0 5" HorizontalAlignment="Center"/>
                 <Button x:Name="firstAnswer" HorizontalAlignment="Center" Content="" Margin="0 10" MinWidth="350" Click="mainMenuCreateRoomButtonClick"/>

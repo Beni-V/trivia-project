@@ -150,12 +150,18 @@ void SqliteDatabase::sendSqlStatement(std::string sqlStatement, int(*callback)(v
 }
 
 // wil return the questions vector from db
-std::vector<std::vector<std::string>> SqliteDatabase::getQuestions()
+std::vector<Question> SqliteDatabase::getQuestions()
 {
-    std::vector<std::vector<std::string>> questions;
+    std::vector<std::vector<std::string>> questionsInStringFormat;
+    std::vector<Question> questions;
 
     std::string sqlStatement = "SELECT * FROM QUESTIONS;";
-    sendSqlStatement(sqlStatement, callBackGetQuestions, &questions);
+    sendSqlStatement(sqlStatement, callBackGetQuestions, &questionsInStringFormat);
+
+    for (std::vector<std::string> question : questionsInStringFormat)
+    {
+        questions.push_back(Question(question[QUESTION_INDEX], std::vector<std::string>{question[FIRST_ANSWER_INDEX], question[SECOND_ANSWER_INDEX], question[THIRD_ANSWER_INDEX], question[RIGHT_ANSWER_INDEX]}));
+    }
 
     return questions;
 }

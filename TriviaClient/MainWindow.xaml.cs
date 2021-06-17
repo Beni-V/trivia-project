@@ -61,6 +61,10 @@ namespace TriviaClient
     {
         public int roomId { get; set; }
     }
+    public class SubmitAnswerRequest
+    {
+        public int answerId { get; set; }
+    }
     public partial class MainWindow : Window
     {
         public const int LOGIN_REQUEST = 201;
@@ -92,11 +96,17 @@ namespace TriviaClient
         public Thread updateParticipantsForAdminThread;
         public Thread updateParticipantsForMemberThread;
         public Thread refreshRoomsListThread;
+        public Thread updateGameScreenThread;
 
         // bool vars for threads, threads will run only if his flag is true
         public bool runUpdateParticipantsForAdminThread = false;
         public bool runUpdateParticipantsForMemberThread = false;
         public bool runRefreshRoomsListThread = false;
+        public bool runUpdateGameScreen = false;
+
+        public int currentQuestionTimeOut;
+        public int currentGameQuestionsTimeOut;
+        public int currentQuestionsAmount;
 
         public static NetworkStream clientStream; // all the transfering will be completed through this variable
 
@@ -111,6 +121,8 @@ namespace TriviaClient
             updateParticipantsForMemberThread.Start();
             refreshRoomsListThread = new Thread(refreshRoomList);
             refreshRoomsListThread.Start();
+            updateGameScreenThread = new Thread(updateGameScreen);
+            updateGameScreenThread.Start();
 
             StartClient(); // create connection with the server
 
@@ -627,6 +639,9 @@ namespace TriviaClient
                             memberPanelQuestionsTimeOutBox.Text = $"Questions timeout {(string)response["answerTimeout"]}";
                         }));
 
+                        currentGameQuestionsTimeOut = Int16.Parse((string)response["answerTimeout"]);
+                        currentQuestionTimeOut = currentGameQuestionsTimeOut;
+
                         JArray Jplayers = (JArray)response["players"]; // get the players in Jarray format
                         string[] players = Jplayers.Select(jv => (string)jv).ToArray(); // convert it to regular string array
 
@@ -647,9 +662,12 @@ namespace TriviaClient
 
                         if ((bool)response["hasGameBegun"])
                         {
+                            runUpdateParticipantsForMemberThread = false;
+                            runUpdateGameScreen = true;
                             this.Dispatcher.Invoke((Action)(() =>
                             {
-                                roomStartedDialog.IsOpen = true;
+                                roomMemberBorder.Visibility = Visibility.Hidden;
+                                gameBorder.Visibility = Visibility.Visible;
                             }));
                         }
                     }
@@ -693,10 +711,75 @@ namespace TriviaClient
             }
         }
 
+        public void updateGameScreen()
+        {
+            while (true) // main infinity loop
+            {
+                while (runUpdateGameScreen) // check if flag is true
+                {
+                    if (currentQuestionTimeOut <= 0)
+                    {
+                        currentQuestionTimeOut = currentGameQuestionsTimeOut;
+                        SubmitAnswerRequest submitAnswerRequest = new SubmitAnswerRequest // create the request struct
+                        {
+                            answerId = 1                            
+                        };
+
+                        string jsonDump = JsonConvert.SerializeObject(submitAnswerRequest, Formatting.Indented); // serialize struct into jsonDump
+                        serializeAndSendMessage(SUBMIT_ANSWER_REQUEST, jsonDump); // send message to server
+
+                        Dictionary<string, object> submitAnswerResponse = receiveAndDeserializeMessage(); // receive response
+
+                        if (submitAnswerResponse.ContainsKey("status") && (string)submitAnswerResponse["status"] == "1") // if there is  a success status
+                        {
+                        }
+                        else // if its any other error message, display it
+                        {
+                            this.Dispatcher.Invoke((Action)(() =>
+                            {
+                                gameErrorBox.Text = (string)submitAnswerResponse["message"];
+                            }));
+                        }
+                    }
+
+                    serializeAndSendMessage(GET_QUESTION_REQUEST, ""); 
+                    Dictionary<string, object> response = receiveAndDeserializeMessage(); // receive response
+
+                    if (response.ContainsKey("status") && (string)response["status"] == "1") // if there is  a success status
+                    {
+                        JArray Janswers = (JArray)response["answers"];
+
+                        this.Dispatcher.Invoke((Action)(() =>
+                        {
+                            gameCurrentQuestion.Text = (string)response["question"];
+                            firstAnswer.Content = Janswers[0][1];
+                            secondAnswer.Content = Janswers[1][1];
+                            thirdAnswer.Content = Janswers[2][1];
+                            fourthAnswer.Content = Janswers[3][1];
+                            gameQuestionTimer.Text = $"Time left: {currentQuestionTimeOut.ToString()}";
+                        }));
+                    }
+                    else // if its any other error message, display it
+                    {
+                        this.Dispatcher.Invoke((Action)(() =>
+                        {
+                            gameErrorBox.Text = (string)response["message"];
+                        }));
+                    }
+                    Thread.Sleep(1000); // sleep thread for 1 second
+                    currentQuestionTimeOut--;
+                }
+            }
+        }
+
         private void createRoomBackButtonClick(object sender, RoutedEventArgs e)
         {
             createRoomBorder.Visibility = Visibility.Hidden;
             mainMenuBorder.Visibility = Visibility.Visible;
+        }
+        private void leaveGameButtonClick(object sender, RoutedEventArgs e)
+        {
+
         }
         private void createRoomButtonClick(object sender, RoutedEventArgs e)
         {

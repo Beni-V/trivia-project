@@ -20,6 +20,6 @@ private:
 public:
     Game(std::vector<Question> questions, std::map<std::string, GameData> players);
     Question getQuestionForUser(std::string user);
-    void submitAnswer(std::string user, std::string answer);
+    void submitAnswer(std::string user, int answerId);
     void removePlayer(std::string user);
 };

@@ -18,6 +18,7 @@ class GameRequestHandler;
 class RequestHandlerFactory
 {
 public:
+	RequestHandlerFactory();
 	LoginRequestHandler* createLoginRequestHandler();
 	MenuRequestHandler* createMenuRequestHandler(LoggedUser user);
 	LoginManager& getLoginManager();
@@ -25,7 +26,7 @@ public:
 	RoomManager& getRoomManager();
 	RoomAdminRequestHandler* createRoomAdminRequestHandler(Room& room, LoggedUser& user);
 	RoomMemberRequestHandler* createRoomMemberRequestHandler(Room& room, LoggedUser& user);
-	GameRequestHandler* createGameRequestHandler(Game& game, LoggedUser& user);
+	GameRequestHandler* createGameRequestHandler(LoggedUser& user, std::vector<std::string> players);
 	GameManager& getGameManager();
 
 private:

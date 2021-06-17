@@ -1,5 +1,10 @@
 #include "RequestHandlerFactory.h"
 
+RequestHandlerFactory::RequestHandlerFactory()
+{
+    this->m_database = new SqliteDatabase();
+}
+
 LoginRequestHandler* RequestHandlerFactory::createLoginRequestHandler()
 {
     LoginRequestHandler* loginHandler = new LoginRequestHandler(*this);
@@ -37,8 +42,18 @@ RoomMemberRequestHandler* RequestHandlerFactory::createRoomMemberRequestHandler(
     return new RoomMemberRequestHandler(*this, room, user);
 }
 
-GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(Game& game, LoggedUser& user)
+GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser& user, std::vector<std::string> players)
 {
+    std::map<std::string, GameData> gameDataPlayers;
+    std::vector<Question> questions = this->m_database->getQuestions();
+
+    for (std::string player : players)
+    {
+        gameDataPlayers.insert({ player, GameData{questions[0], 0, 0, 0} });
+    }
+
+    Game game = Game(questions, gameDataPlayers);
+
     return new GameRequestHandler(*this, this->getGameManager(), game, user);
 }
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "IDatabase.h"
+#include "Question.h"
 #include "sqlite3.h"
 #include <iostream>
 #include <io.h>
@@ -15,7 +16,7 @@ public:
 	bool doesPasswordMatch(std::string userName, std::string password) override;
 	void addNewUser(std::string userName, std::string password, std::string email) override;
 	void sendSqlStatement(std::string sqlStatement, int(*callback)(void*, int, char**, char**), void* data);
-	std::vector<std::vector<std::string>> getQuestions() override;
+	std::vector<Question> getQuestions() override;
 	float getPlayerAverageAnswerTime(std::string userName) override;
 	int getNumOfCorrectAnswers(std::string userName) override;
 	int getNumOfTotalAnswers(std::string userName) override;
