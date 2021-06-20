@@ -2,6 +2,8 @@
 #include <map>
 #include "Question.h"
 #include "LoggedUser.h"
+#include "JsonResponsePacketSerializer.h"
+
 
 struct GameData
 {
@@ -22,4 +24,5 @@ public:
     Question getQuestionForUser(std::string user);
     void submitAnswer(std::string user, int answerId);
     void removePlayer(std::string user);
+    std::vector<PlayerResult> getPlayersResults();
 };

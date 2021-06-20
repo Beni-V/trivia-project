@@ -106,7 +106,10 @@ namespace TriviaClient
 
         public int currentQuestionTimeOut;
         public int currentGameQuestionsTimeOut;
+        public int currentGameQuestionsAmount;
         public int currentQuestionsAmount;
+        public string[] currentQuestionAnswers;
+        public bool isCurrentQuestionAnswered;
 
         public static NetworkStream clientStream; // all the transfering will be completed through this variable
 
@@ -606,7 +609,6 @@ namespace TriviaClient
                                 roomParticipants.Items.Add(new Label().Content = Jplayers[i]);
                             }));
                         }
-
                     }
                     else if (response.ContainsKey("message")) // display error message if there is an error message in the response
                     {
@@ -615,7 +617,7 @@ namespace TriviaClient
                             roomAdminPanelErrorBox.Text = (string)response["message"];
                         }));
                     }
-                    Thread.Sleep(3000); // sleep the thread for 3 seconds
+                    Thread.Sleep(1000); // sleep the thread for 1 seconds
                 }
             }
         }
@@ -641,6 +643,9 @@ namespace TriviaClient
 
                         currentGameQuestionsTimeOut = Int16.Parse((string)response["answerTimeout"]);
                         currentQuestionTimeOut = currentGameQuestionsTimeOut;
+
+                        currentGameQuestionsAmount = Int16.Parse((string)response["questionCount"]);
+                        currentQuestionsAmount = 0;
 
                         JArray Jplayers = (JArray)response["players"]; // get the players in Jarray format
                         string[] players = Jplayers.Select(jv => (string)jv).ToArray(); // convert it to regular string array
@@ -706,7 +711,7 @@ namespace TriviaClient
                             }));
                         }
                     }
-                    Thread.Sleep(3000); // sleep thread for 3 seconds
+                    Thread.Sleep(1000); // sleep thread for 1 second
                 }
             }
         }
@@ -717,59 +722,111 @@ namespace TriviaClient
             {
                 while (runUpdateGameScreen) // check if flag is true
                 {
-                    if (currentQuestionTimeOut <= 0)
+                    if (currentQuestionTimeOut == 0 || currentQuestionsAmount == 0)
                     {
+                        if (currentQuestionsAmount != 0)
+                        {
+                            if (!isCurrentQuestionAnswered)
+                            {
+                                SubmitAnswerRequest submitAnswerRequest = new SubmitAnswerRequest // create the request struct
+                                {
+                                    answerId = 1
+                                };
+
+                                string jsonDump = JsonConvert.SerializeObject(submitAnswerRequest, Formatting.Indented); // serialize struct into jsonDump
+                                serializeAndSendMessage(SUBMIT_ANSWER_REQUEST, jsonDump); // send message to server
+                                Dictionary<string, object> submitAnswerResponse = receiveAndDeserializeMessage(); // receive response
+                            }
+                        }
+                        isCurrentQuestionAnswered = false;
+
                         currentQuestionTimeOut = currentGameQuestionsTimeOut;
-                        SubmitAnswerRequest submitAnswerRequest = new SubmitAnswerRequest // create the request struct
+
+                        serializeAndSendMessage(GET_QUESTION_REQUEST, "");
+                        Dictionary<string, object> response = receiveAndDeserializeMessage(); // receive response
+
+                        if (response.ContainsKey("status") && (string)response["status"] == "1") // if there is  a success status
                         {
-                            answerId = 1                            
-                        };
+                            JArray Janswers = (JArray)response["answers"];
+                            currentQuestionAnswers = new string[] { (string)Janswers[0][1], (string)Janswers[1][1], (string)Janswers[2][1], (string)Janswers[3][1] };
+                            string[] shuffledAnswers = Randomize(currentQuestionAnswers);
 
-                        string jsonDump = JsonConvert.SerializeObject(submitAnswerRequest, Formatting.Indented); // serialize struct into jsonDump
-                        serializeAndSendMessage(SUBMIT_ANSWER_REQUEST, jsonDump); // send message to server
+                            var bc = new BrushConverter();
 
-                        Dictionary<string, object> submitAnswerResponse = receiveAndDeserializeMessage(); // receive response
-
-                        if (submitAnswerResponse.ContainsKey("status") && (string)submitAnswerResponse["status"] == "1") // if there is  a success status
-                        {
+                            this.Dispatcher.Invoke((Action)(() =>
+                            {
+                                firstAnswer.Background = (Brush)bc.ConvertFrom("#673ab7");
+                                secondAnswer.Background = (Brush)bc.ConvertFrom("#673ab7");
+                                thirdAnswer.Background = (Brush)bc.ConvertFrom("#673ab7");
+                                fourthAnswer.Background = (Brush)bc.ConvertFrom("#673ab7");
+                                gameCurrentQuestion.Text = (string)response["question"];
+                                firstAnswer.Content = shuffledAnswers[0];
+                                secondAnswer.Content = shuffledAnswers[1];
+                                thirdAnswer.Content = shuffledAnswers[2];
+                                fourthAnswer.Content = shuffledAnswers[3];
+                                gameQuestionTimer.Text = $"Time left: {currentQuestionTimeOut.ToString()}";
+                            }));
                         }
                         else // if its any other error message, display it
                         {
                             this.Dispatcher.Invoke((Action)(() =>
                             {
-                                gameErrorBox.Text = (string)submitAnswerResponse["message"];
+                                gameErrorBox.Text = (string)response["message"];
                             }));
                         }
+                        currentQuestionsAmount++;
+
+                        if (currentQuestionsAmount > currentGameQuestionsAmount)
+                        {
+                            string content = "";
+
+                            serializeAndSendMessage(GET_GAME_RESULT_REQUEST, ""); // send message to server
+                            Dictionary<string, object> getGameResultResponse = receiveAndDeserializeMessage(); // receive response
+
+                            JObject jResults = (JObject)getGameResultResponse["results"];
+
+                            foreach (var stats in jResults)
+                            {
+                                content += "user name: " + stats.Key + " Score: " + stats.Value[0] + "\n";
+                            }
+                            this.Dispatcher.Invoke((Action)(() =>
+                            {
+                                gameBorder.Visibility = Visibility.Hidden;
+                                dialogTextBlock.Text = content;
+                                roomClosedDialog.IsOpen = true;
+                                mainMenuBorder.Visibility = Visibility.Visible;
+                            }));
+
+                            runUpdateGameScreen = false;
+                        }
                     }
-
-                    serializeAndSendMessage(GET_QUESTION_REQUEST, ""); 
-                    Dictionary<string, object> response = receiveAndDeserializeMessage(); // receive response
-
-                    if (response.ContainsKey("status") && (string)response["status"] == "1") // if there is  a success status
+                    else
                     {
-                        JArray Janswers = (JArray)response["answers"];
-
+                        Thread.Sleep(1000);
+                        currentQuestionTimeOut--;
                         this.Dispatcher.Invoke((Action)(() =>
                         {
-                            gameCurrentQuestion.Text = (string)response["question"];
-                            firstAnswer.Content = Janswers[0][1];
-                            secondAnswer.Content = Janswers[1][1];
-                            thirdAnswer.Content = Janswers[2][1];
-                            fourthAnswer.Content = Janswers[3][1];
                             gameQuestionTimer.Text = $"Time left: {currentQuestionTimeOut.ToString()}";
                         }));
                     }
-                    else // if its any other error message, display it
-                    {
-                        this.Dispatcher.Invoke((Action)(() =>
-                        {
-                            gameErrorBox.Text = (string)response["message"];
-                        }));
-                    }
-                    Thread.Sleep(1000); // sleep thread for 1 second
-                    currentQuestionTimeOut--;
                 }
             }
+        }
+        public string[] Randomize(string[] input)
+        {
+            List<string> inputList = input.ToList();
+            string[] output = new string[input.Length];
+            Random randomizer = new Random();
+            int i = 0;
+
+            while (inputList.Count > 0)
+            {
+                int index = randomizer.Next(inputList.Count);
+                output[i++] = inputList[index];
+                inputList.RemoveAt(index);
+            }
+
+            return (output);
         }
 
         private void createRoomBackButtonClick(object sender, RoutedEventArgs e)
@@ -779,7 +836,143 @@ namespace TriviaClient
         }
         private void leaveGameButtonClick(object sender, RoutedEventArgs e)
         {
+            serializeAndSendMessage(LEAVE_GAME_REQUEST, ""); // send message to server
+            Dictionary<string, object> getGameResultResponse = receiveAndDeserializeMessage(); // receive response
+            runUpdateGameScreen = false;
+            gameBorder.Visibility = Visibility.Hidden;
+            mainMenuBorder.Visibility = Visibility.Visible;
+        }
+        private void firstAnswerButtonClick(object sender, RoutedEventArgs e)
+        {
+            SubmitAnswerRequest submitAnswerRequest;
 
+            if (isCurrentQuestionAnswered == false)
+            {                
+                isCurrentQuestionAnswered = true;
+
+                if ((e.Source as Button).Content.ToString() == currentQuestionAnswers[3])
+                {
+                    (e.Source as Button).Background = Brushes.Green;
+
+                    submitAnswerRequest = new SubmitAnswerRequest // create the request struct
+                    {
+                        answerId = 4
+                    };
+
+                }
+                else 
+                {
+                    (e.Source as Button).Background = Brushes.Red;
+
+                    submitAnswerRequest = new SubmitAnswerRequest // create the request struct
+                    {
+                        answerId = 1
+                    };
+                }
+
+                string jsonDump = JsonConvert.SerializeObject(submitAnswerRequest, Formatting.Indented); // serialize struct into jsonDump
+                serializeAndSendMessage(SUBMIT_ANSWER_REQUEST, jsonDump); // send message to server
+                Dictionary<string, object> response = receiveAndDeserializeMessage(); // receive response
+            }
+        }
+        private void secondAnswerButtonClick(object sender, RoutedEventArgs e)
+        {
+            SubmitAnswerRequest submitAnswerRequest;
+
+            if (isCurrentQuestionAnswered == false)
+            {
+                isCurrentQuestionAnswered = true;
+
+                if ((e.Source as Button).Content.ToString() == currentQuestionAnswers[3])
+                {
+                    (e.Source as Button).Background = Brushes.Green;
+
+                    submitAnswerRequest = new SubmitAnswerRequest // create the request struct
+                    {
+                        answerId = 4
+                    };
+
+                }
+                else
+                {
+                    (e.Source as Button).Background = Brushes.Red;
+
+                    submitAnswerRequest = new SubmitAnswerRequest // create the request struct
+                    {
+                        answerId = 1
+                    };
+                }
+
+                string jsonDump = JsonConvert.SerializeObject(submitAnswerRequest, Formatting.Indented); // serialize struct into jsonDump
+                serializeAndSendMessage(SUBMIT_ANSWER_REQUEST, jsonDump); // send message to server
+                Dictionary<string, object> response = receiveAndDeserializeMessage(); // receive response
+            }
+        }
+        private void thirdAnswerButtonClick(object sender, RoutedEventArgs e)
+        {
+            SubmitAnswerRequest submitAnswerRequest;
+
+            if (isCurrentQuestionAnswered == false)
+            {
+                isCurrentQuestionAnswered = true;
+
+                if ((e.Source as Button).Content.ToString() == currentQuestionAnswers[3])
+                {
+                    (e.Source as Button).Background = Brushes.Green;
+
+                    submitAnswerRequest = new SubmitAnswerRequest // create the request struct
+                    {
+                        answerId = 4
+                    };
+
+                }
+                else
+                {
+                    (e.Source as Button).Background = Brushes.Red;
+
+                    submitAnswerRequest = new SubmitAnswerRequest // create the request struct
+                    {
+                        answerId = 1
+                    };
+                }
+
+                string jsonDump = JsonConvert.SerializeObject(submitAnswerRequest, Formatting.Indented); // serialize struct into jsonDump
+                serializeAndSendMessage(SUBMIT_ANSWER_REQUEST, jsonDump); // send message to server
+                Dictionary<string, object> response = receiveAndDeserializeMessage(); // receive response
+            }
+        }
+        private void fourthAnswerButtonClick(object sender, RoutedEventArgs e)
+        {
+            SubmitAnswerRequest submitAnswerRequest;
+
+            if (isCurrentQuestionAnswered == false)
+            {
+                isCurrentQuestionAnswered = true;
+
+                if ((e.Source as Button).Content.ToString() == currentQuestionAnswers[3])
+                {
+                    (e.Source as Button).Background = Brushes.Green;
+
+                    submitAnswerRequest = new SubmitAnswerRequest // create the request struct
+                    {
+                        answerId = 4
+                    };
+
+                }
+                else
+                {
+                    (e.Source as Button).Background = Brushes.Red;
+
+                    submitAnswerRequest = new SubmitAnswerRequest // create the request struct
+                    {
+                        answerId = 1
+                    };
+                }
+
+                string jsonDump = JsonConvert.SerializeObject(submitAnswerRequest, Formatting.Indented); // serialize struct into jsonDump
+                serializeAndSendMessage(SUBMIT_ANSWER_REQUEST, jsonDump); // send message to server
+                Dictionary<string, object> response = receiveAndDeserializeMessage(); // receive response
+            }
         }
         private void createRoomButtonClick(object sender, RoutedEventArgs e)
         {
@@ -788,7 +981,15 @@ namespace TriviaClient
 
             if (response.ContainsKey("status") && (string)response["status"] == "1") // if response have success status
             {
-                roomStartedDialog.IsOpen = true;
+                currentGameQuestionsTimeOut = Int16.Parse(creatingRoomQuestionTimeBox.Text);
+                currentQuestionTimeOut = currentGameQuestionsTimeOut;
+                currentGameQuestionsAmount = Int16.Parse(creatingRoomQuestionsAmountBox.Text);
+                currentQuestionsAmount = 0;
+
+                runUpdateParticipantsForAdminThread = false;
+                runUpdateGameScreen = true;
+                createRoomAdminBorder.Visibility = Visibility.Hidden;
+                gameBorder.Visibility = Visibility.Visible;
             }
             else if (response.ContainsKey("message")) // display the error message if there is an error message in the response
             {

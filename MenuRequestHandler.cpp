@@ -81,7 +81,10 @@ RequestResult MenuRequestHandler::getRooms(RequestInfo info)
 
 	for (std::pair<unsigned int, Room> room : rooms)
 	{
-		roomsData.push_back(RoomData{ room.first, room.second.getName(), (unsigned int)room.second.getMaxPlayers(), (unsigned int)room.second.getQuestionsAmount(), (unsigned int)room.second.getQuestionTimeOut(), room.second.getIsActive() });
+		if (!room.second.getIsActive())
+		{
+			roomsData.push_back(RoomData{ room.first, room.second.getName(), (unsigned int)room.second.getMaxPlayers(), (unsigned int)room.second.getQuestionsAmount(), (unsigned int)room.second.getQuestionTimeOut(), room.second.getIsActive() });
+		}
 	}
 	std::cout << std::endl;
 	requestResultStruct.newHandler = this; // fill newHandler with next handler

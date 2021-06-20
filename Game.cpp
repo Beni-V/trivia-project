@@ -33,3 +33,15 @@ void Game::removePlayer(std::string user)
 {
     this->m_players.erase(user);
 }
+
+std::vector<PlayerResult> Game::getPlayersResults()
+{
+    std::vector<PlayerResult> results;
+
+    for (std::pair<std::string, GameData> player : this->m_players)
+    {
+        results.push_back(PlayerResult{ player.first, player.second.correctAnswerCount, player.second.wrongAnswerCount, 0 });
+    }
+
+    return results;
+}

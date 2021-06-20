@@ -35,8 +35,8 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo requestInfoStruct)
 {
 	RequestResult requestResultStruct;
 
-	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetGameResultResponse{ SUCCSESS_RESPONSE}); // fill buffer with serialized response
-	requestResultStruct.newHandler = this; // fill newHandler with next handler
+	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetGameResultResponse{ SUCCSESS_RESPONSE ,this->m_game.getPlayersResults() }); // fill buffer with serialized response
+	requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_user); // fill newHandler with next handler
 
 	return requestResultStruct;
 }
@@ -47,7 +47,7 @@ RequestResult GameRequestHandler::leaveGame(RequestInfo requestInfoStruct)
 
 	this->m_game.removePlayer(this->m_user.getUsername());
 	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(LeaveGameResponse{ SUCCSESS_RESPONSE }); // fill buffer with serialized response
-	requestResultStruct.newHandler = this; // fill newHandler with next handler
+	requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_user); // fill newHandler with next handler
 
 	return requestResultStruct;
 }
