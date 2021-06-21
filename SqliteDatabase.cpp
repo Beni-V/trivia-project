@@ -43,7 +43,7 @@ SqliteDatabase::SqliteDatabase()
             {"What is Debugging?", "Insect elimination process", "Kind of sport", "Musical genre", "Being the detective in a crime movie where you are also the murderer"},
             {"What Americans do at least a hundred times a day?", "Blinking", "Open up a smartphone", "Steps", "Open up the refrigerator"},
             {"What is the capital of Israel?", "Haifa", "Rishon-Lezion", "Kfar-Saba", "Jerusalem"},
-            {"Which of these tools is the most powerful for collecting data?", "Nmap", "WPScan", "Wireshark", "Facebook"}
+            {"Which of these tools is the most powerful for collecting data?", "Nmap", "WPScan", "Wireshark", "Facebook"},
         };
 
         // create users table

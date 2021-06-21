@@ -29,10 +29,11 @@ public:
 	GameRequestHandler* createGameRequestHandler(LoggedUser& user, std::vector<std::string> players);
 	GameManager& getGameManager();
 
+	SqliteDatabase* m_database;
+
 private:
 	LoginManager m_loginManager;
 	RoomManager m_roomManager;
 	StatisticsManager m_StatisticsManager;
 	GameManager m_gameManager;
-	IDAtabase* m_database;
 };

@@ -28,6 +28,15 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo requestInfoStruct)
 
 	this->m_game.submitAnswer(this->m_user.getUsername(), request.answerId);
 
+	if (request.answerId == CORRECT_ANSWER_INDEX)
+	{
+		this->m_handlerFactory.m_database->sendSqlStatement("UPDATE STATISTICS SET TOTAL_ANSWERS_AMOUNT = TOTAL_ANSWERS_AMOUNT + 1, CORRECT_ANSWERS_AMOUNT = CORRECT_ANSWERS_AMOUNT + 1 WHERE USERNAME = '" + this->m_user.getUsername()  + "';", NULL, NULL);
+	}
+	else
+	{
+		this->m_handlerFactory.m_database->sendSqlStatement("UPDATE STATISTICS SET TOTAL_ANSWERS_AMOUNT = TOTAL_ANSWERS_AMOUNT + 1 WHERE USERNAME = '" + this->m_user.getUsername() + "';", NULL, NULL);
+	}
+
 	return requestResultStruct;
 }
 
