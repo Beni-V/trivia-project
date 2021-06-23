@@ -45,3 +45,15 @@ std::vector<PlayerResult> Game::getPlayersResults()
 
     return results;
 }
+
+std::vector<std::string> Game::getUserNames()
+{
+    std::vector<std::string> result;
+
+    for (std::pair<std::string, GameData> player : this->m_players)
+    {
+        result.push_back(player.first);
+    }
+
+    return result;
+}

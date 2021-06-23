@@ -25,4 +25,5 @@ public:
     void submitAnswer(std::string user, int answerId);
     void removePlayer(std::string user);
     std::vector<PlayerResult> getPlayersResults();
+    std::vector<std::string> getUserNames();
 };

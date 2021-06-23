@@ -52,9 +52,19 @@ GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser& 
         gameDataPlayers.insert({ player, GameData{questions[0], 0, 0, 0} });
     }
 
-    Game game = Game(questions, gameDataPlayers);
+    //Game game = Game(questions, gameDataPlayers);
 
-    return new GameRequestHandler(*this, this->getGameManager(), game, user);
+    for (Game game : this->getGameManager().getGames())
+    {
+        for (PlayerResult playerResults : game.getPlayersResults())
+        {
+            if (playerResults.username == user.getUsername())
+            {
+                return new GameRequestHandler(*this, this->getGameManager(), game, user);
+            }
+        }
+    }
+
 }
 
 GameManager& RequestHandlerFactory::getGameManager()

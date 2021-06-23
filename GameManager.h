@@ -14,4 +14,6 @@ public:
 	GameManager();
 	Game createGame(Room room);
 	void deleteGame(Game gameToDelete);
+	std::vector<Game> getGames();
+	void submitAnswer(Game game, std::string user, int answerId);
 };

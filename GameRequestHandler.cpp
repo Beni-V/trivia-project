@@ -28,6 +28,8 @@ RequestResult GameRequestHandler::submitAnswer(RequestInfo requestInfoStruct)
 
 	this->m_game.submitAnswer(this->m_user.getUsername(), request.answerId);
 
+	this->m_gameManager.submitAnswer(this->m_game, this->m_user.getUsername(), request.answerId);
+
 	if (request.answerId == CORRECT_ANSWER_INDEX)
 	{
 		this->m_handlerFactory.m_database->sendSqlStatement("UPDATE STATISTICS SET TOTAL_ANSWERS_AMOUNT = TOTAL_ANSWERS_AMOUNT + 1, CORRECT_ANSWERS_AMOUNT = CORRECT_ANSWERS_AMOUNT + 1 WHERE USERNAME = '" + this->m_user.getUsername()  + "';", NULL, NULL);
@@ -44,7 +46,14 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo requestInfoStruct)
 {
 	RequestResult requestResultStruct;
 
-	requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetGameResultResponse{ SUCCSESS_RESPONSE ,this->m_game.getPlayersResults() }); // fill buffer with serialized response
+	for (Game game : this->m_gameManager.getGames())
+	{
+		if (game.getUserNames() == this->m_game.getUserNames())
+		{
+			requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetGameResultResponse{ SUCCSESS_RESPONSE, game.getPlayersResults() }); // fill buffer with serialized response
+		}
+	}
+
 	requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_user); // fill newHandler with next handler
 
 	return requestResultStruct;
