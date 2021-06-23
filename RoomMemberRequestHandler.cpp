@@ -21,6 +21,10 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo requestInfoStru
 	{
 		requestResultStruct.Buffer = JsonResponsePacketSerializer::serializeResponse(GetRoomStateResponse{ SUCCSESS_RESPONSE, this->m_roomManager.getRooms()[this->m_room.getId()].getIsActive(), this->m_roomManager.getRooms()[this->m_room.getId()].getAllUsers(), this->m_room.getQuestionsAmount(), this->m_room.getQuestionTimeOut() }); // fill buffer with serialized response
 		requestResultStruct.newHandler = this; // fill newHandler with next handler
+		if (this->m_roomManager.getRooms()[this->m_room.getId()].getIsActive())
+		{
+			requestResultStruct.newHandler = this->m_handlerFactory.createGameRequestHandler(this->m_user, this->m_roomManager.getRooms()[this->m_room.getId()].getAllUsers()); // fill newHandler with next handler
+		}
 	}
 	else
 	{
@@ -28,10 +32,6 @@ RequestResult RoomMemberRequestHandler::getRoomState(RequestInfo requestInfoStru
 		requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_user); // fill newHandler with next handler
 	}
 
-	if (this->m_roomManager.getRooms()[this->m_room.getId()].getIsActive())
-	{
-		requestResultStruct.newHandler = this->m_handlerFactory.createGameRequestHandler(this->m_user, this->m_roomManager.getRooms()[this->m_room.getId()].getAllUsers()); // fill newHandler with next handler
-	}
 
 	return requestResultStruct;
 }
