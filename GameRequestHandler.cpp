@@ -56,6 +56,8 @@ RequestResult GameRequestHandler::getGameResults(RequestInfo requestInfoStruct)
 
 	requestResultStruct.newHandler = this->m_handlerFactory.createMenuRequestHandler(this->m_user); // fill newHandler with next handler
 
+	this->m_handlerFactory.m_database->sendSqlStatement("UPDATE STATISTICS SET GAMES_DONE_AMOUNT = GAMES_DONE_AMOUNT + 1 WHERE USERNAME = '" + this->m_user.getUsername() + "';", NULL, NULL);
+
 	return requestResultStruct;
 }
 

@@ -26,4 +26,5 @@ public:
     void removePlayer(std::string user);
     std::vector<PlayerResult> getPlayersResults();
     std::vector<std::string> getUserNames();
+    void resetUsersGameData();
 };

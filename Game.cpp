@@ -11,12 +11,15 @@ Question Game::getQuestionForUser(std::string user)
 
 void Game::submitAnswer(std::string user, int answerId)
 {
-    for (int i = 0; i < this->m_questions.size(); i++)
+    if (this->m_players.at(user).currentQuestion.getQuestion() != this->m_questions[10].getQuestion())
     {
-        if (this->m_questions[i] == this->m_players.at(user).currentQuestion && i != this->m_questions.size())
+        for (int i = 0; i < this->m_questions.size(); i++)
         {
-            this->m_players.at(user).currentQuestion = this->m_questions[i + 1];
-            break;
+            if (this->m_questions[i] == this->m_players.at(user).currentQuestion && i != this->m_questions.size())
+            {
+                this->m_players.at(user).currentQuestion = this->m_questions[i + 1];
+                break;
+            }
         }
     }
     if (answerId == CORRECT_ANSWER_INDEX)
@@ -56,4 +59,12 @@ std::vector<std::string> Game::getUserNames()
     }
 
     return result;
+}
+
+void Game::resetUsersGameData()
+{
+    for (std::pair<std::string, GameData> player : this->m_players)
+    {
+        this->m_players.at(player.first).currentQuestion = this->m_questions[0];
+    }
 }

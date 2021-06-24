@@ -427,7 +427,6 @@ namespace TriviaClient
                 statusGamesAmountBox.Text = $"Number of played games: {Jstatistics[3]}";
                 statusRightAnswersAmountBox.Text = $"Amount of right answers: {Jstatistics[1]}";
                 statusWrongAnswersAmountBox.Text = $"Amount of total answers: {Jstatistics[2]}";
-                statusAverageAnswerTimeBox.Text = $"Average time for answer: {Jstatistics[0]}";
             }
             else if (response.ContainsKey("message")) // display the error message if there is an error message
             {
@@ -711,7 +710,7 @@ namespace TriviaClient
                             }));
                         }
                     }
-                    Thread.Sleep(1000); // sleep thread for 1 second
+                    Thread.Sleep(300); // sleep thread for 0.3 second
                 }
             }
         }

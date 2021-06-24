@@ -60,6 +60,7 @@ GameRequestHandler* RequestHandlerFactory::createGameRequestHandler(LoggedUser& 
         {
             if (playerResults.username == user.getUsername())
             {
+                game.resetUsersGameData();
                 return new GameRequestHandler(*this, this->getGameManager(), game, user);
             }
         }

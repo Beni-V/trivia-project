@@ -40,10 +40,11 @@ SqliteDatabase::SqliteDatabase()
             {"What is the worst programming language on the planet earth?", "Python", "C++", "Assembly", "JavaScript"},
             {"Who is the richest person in the world?", "Bill Gates", "Elon Musk", "Jeff Bezos", "Vladimir Putin"},
             {"Which chess piece is the most valuable?", "Rook", "Bishop", "Queen", "King"},
-            {"What is Debugging?", "Insect elimination process", "Kind of sport", "Musical genre", "Being the detective in a crime movie where you are also the murderer"},
+            {"What is Debugging?", "Insect elimination process", "Kind of sport", "Musical genre", "Process of fixing mistakes in code"},
             {"What Americans do at least a hundred times a day?", "Blinking", "Open up a smartphone", "Steps", "Open up the refrigerator"},
             {"What is the capital of Israel?", "Haifa", "Rishon-Lezion", "Kfar-Saba", "Jerusalem"},
             {"Which of these tools is the most powerful for collecting data?", "Nmap", "WPScan", "Wireshark", "Facebook"},
+            {"", "", "", "", ""},
         };
 
         // create users table
